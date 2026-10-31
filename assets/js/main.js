@@ -11,38 +11,51 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let footerVisible = false, fabShown = false, hiddenBy = 'top', stopDrip = null;
 const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
 
-const drip = (dur = 1800) => {
+const drip = (dur = 1500) => {
   const src = document.querySelector(matchMedia('(max-width: 991px)').matches ? '.menu-btn' : '.header .nav__cta');
   const a = src.getBoundingClientRect(), b = fabBtn.getBoundingClientRect();
   if (!a.width || !b.width) return;
   const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v)), lerp = (x, y, t) => x + (y - x) * t;
-  const inOut = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, easeIn = t => t * t * t, easeOut = t => 1 - Math.pow(1 - t, 3);
-  const ax = a.left + a.width / 2, ay = a.top + a.height / 2, top0 = a.bottom - 6;
+  const inOut = t => -(Math.cos(Math.PI * t) - 1) / 2, easeIn = t => t * t, easeOut = t => 1 - Math.pow(1 - t, 3);
+  const ax = a.left + a.width / 2, ay = a.top + a.height / 2;
   const bx = b.left + b.width / 2, by = b.top + b.height / 2;
-  const stretch = Math.min(220, (by - top0) * .45);
+  // Wegpunkte: Ablösen unter dem Button oben, weicher Bogen, Ankunft knapp über dem Ziel
+  const p0 = { x: ax, y: a.bottom - 4 }, p1 = { x: ax, y: a.bottom + 56 }, p2 = { x: bx, y: by - 64 };
+  const ctrl = { x: lerp(p1.x, p2.x, .85), y: lerp(p1.y, p2.y, .25) };
+  const bez = u => ({ x: (1 - u) ** 2 * p1.x + 2 * (1 - u) * u * ctrl.x + u * u * p2.x, y: (1 - u) ** 2 * p1.y + 2 * (1 - u) * u * ctrl.y + u * u * p2.y });
   const layer = document.createElement('div'); layer.className = 'goo-layer'; document.body.appendChild(layer);
-  const blob = (r) => { const d = document.createElement('div'); d.style.borderRadius = r; layer.appendChild(d); return d; };
-  const place = (el, x, y, w, h) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px)`; };
-  const rest = blob('100px'), drop = blob('24px'), thread = Array.from({ length: 16 }, () => blob('50%'));
+  const blob = r => { const d = document.createElement('div'); d.style.borderRadius = r; layer.appendChild(d); return d; };
+  const place = (el, x, y, w, h, rot = 0) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px) rotate(${rot}rad)`; };
+  const rest = blob('100px'), drop = blob('50%'), pool = blob('100px'), neck = Array.from({ length: 5 }, () => blob('50%'));
   fab.classList.add('is-dripping');
-  let raf; const t0 = performance.now();
+  let raf, prev = null; const t0 = performance.now();
   const end = () => { cancelAnimationFrame(raf); layer.remove(); fab.classList.remove('is-dripping'); stopDrip = null; };
+  const P1 = .26, P2 = .76;
   const frame = now => {
-    const t = clamp((now - t0) / dur), pA = .5, pB = .82;
-    let dx, dy;
-    if (t < pA) { dx = ax; dy = lerp(top0, top0 + stretch, inOut(t / pA)); }
-    else { const u = easeIn(clamp((t - pA) / (pB - pA))); dx = lerp(ax, bx, u); dy = lerp(top0 + stretch, by, u); }
-    const det = clamp((t - pA) / .18), keep = Math.max(1 - easeOut(det), .0001);
-    place(rest, ax, ay + det * 10, a.width * lerp(1, .25, det) * keep, a.height * lerp(1, .5, det) * keep);
-    const tu = easeIn(clamp((t - pA) / (pB + .06 - pA))), tx = lerp(ax, dx, tu), ty = lerp(top0, dy, tu);
-    thread.forEach((el, i) => {
-      const s = (i + 1) / (thread.length + 1), r = 7 + 10 * Math.pow(1 - s, 3) * (1 - det) + 12 * Math.pow(s, 6);
-      place(el, lerp(tx, dx, s), lerp(ty, dy, s), r * 2, r * 2);
+    const t = clamp((now - t0) / dur);
+    let pos, size;
+    if (t < P1) { const u = inOut(t / P1); pos = { x: ax, y: lerp(p0.y, p1.y, u) }; size = lerp(18, 40, u); }
+    else if (t < P2) { pos = bez(inOut((t - P1) / (P2 - P1))); size = 40; }
+    else { const u = easeIn((t - P2) / (1 - P2)); pos = { x: bx, y: lerp(p2.y, by, u) }; size = lerp(40, 26, u); }
+    // leichte Streckung in Bewegungsrichtung, abhängig von der Geschwindigkeit
+    const v = prev ? Math.hypot(pos.x - prev.x, pos.y - prev.y) : 0, rot = prev ? Math.atan2(pos.y - prev.y, pos.x - prev.x) - Math.PI / 2 : 0;
+    const st = 1 + Math.min(.16, v * .012); prev = pos;
+    place(drop, pos.x, pos.y, size / st, size * st, rot);
+    // Anfang: Rest oben hängt kurz nach und zieht einen kurzen Faden, dann löst sich der Tropfen
+    const det = clamp((t - P1 * .8) / .14), keep = Math.max(1 - easeOut(det), .0001);
+    place(rest, ax, ay + det * 6, a.width * lerp(1, .3, det) * keep, a.height * lerp(1, .55, det) * keep);
+    // Ende: am Ziel entsteht der Button, der ankommende Tropfen verschmilzt damit
+    const g = clamp((t - P2 + .06) / (1 - P2 + .06)), gw = easeOut(g);
+    const wob = 1 + .05 * Math.sin(clamp((t - .9) / .1) * Math.PI);
+    place(pool, bx, by, lerp(0, b.width, gw) * wob + .0001, lerp(0, b.height, gw) / wob + .0001);
+    neck.forEach((el, i) => {
+      const s = (i + 1) / (neck.length + 1);
+      if (t < P1) { const r = 5 + 3 * (1 - s); place(el, ax, lerp(a.bottom - 2, pos.y, s), r * 2 * keep, r * 2 * keep); }
+      else if (t > P2) { const r = 6 * clamp((t - P2) / .1) * (1 - clamp((t - .94) / .06)); place(el, bx, lerp(pos.y, by - b.height * .3, s), r * 2, r * 2); }
+      else place(el, pos.x, pos.y, 0, 0);
     });
-    if (t < pB) { const sp = t < pA ? 1 : 1 + .25 * easeIn((t - pA) / (pB - pA)); place(drop, dx, dy, 48 / sp, 48 * sp); }
-    else { const u = easeOut((t - pB) / (1 - pB)); drop.style.borderRadius = '100px'; place(drop, bx, by, lerp(48, b.width, u), lerp(40, b.height, u) * (1 + .06 * Math.sin(u * Math.PI))); }
     if (t < 1) raf = requestAnimationFrame(frame);
-    else { fab.classList.remove('is-dripping'); layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180 }).onfinish = end; }
+    else { fab.classList.remove('is-dripping'); layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160 }).onfinish = end; }
   };
   raf = requestAnimationFrame(frame);
   stopDrip = end;

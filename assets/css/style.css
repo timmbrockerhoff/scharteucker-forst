@@ -193,7 +193,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2rem;
 }
 .header__inner > * { pointer-events: auto; }
-.header__inner { transition: opacity .6s cubic-bezier(.25, .6, .3, 1); }
+.header__inner { transition: opacity .65s ease-out; }
 .header.is-hidden .header__inner { opacity: 0; transition-duration: .35s; transition-timing-function: ease-out; }
 .header.is-hidden .header__inner > * { pointer-events: none; }
 

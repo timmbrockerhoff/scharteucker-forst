@@ -49,14 +49,28 @@ menuBtn.addEventListener('click', () => {
   menuBtn.setAttribute('aria-expanded', open);
   document.body.classList.toggle('menu-open', open);
 });
-// Untermenüs: per Klick öffnen, Klick daneben oder Escape schließt
+// Untermenüs: mit Maus beim Überfahren öffnen (kurze Schließverzögerung), sonst per Klick/Tippen; Klick daneben oder Escape schließt
 const toggles = document.querySelectorAll('.nav__toggle');
 const closeDropdowns = () => toggles.forEach(t => { t.parentElement.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); });
-toggles.forEach(t => t.addEventListener('click', () => {
-  const open = !t.parentElement.classList.contains('is-open');
-  closeDropdowns();
-  if (open) { t.parentElement.classList.add('is-open'); t.setAttribute('aria-expanded', 'true'); }
-}));
+const openDropdown = t => { closeDropdowns(); t.parentElement.classList.add('is-open'); t.setAttribute('aria-expanded', 'true'); };
+const hoverNav = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 992px)');
+toggles.forEach(t => {
+  const item = t.parentElement;
+  let closeTimer;
+  t.addEventListener('click', () => {
+    if (hoverNav.matches && item.matches(':hover') && item.classList.contains('is-open')) return;
+    item.classList.contains('is-open') ? closeDropdowns() : openDropdown(t);
+  });
+  item.addEventListener('pointerenter', e => {
+    if (e.pointerType !== 'mouse' || !hoverNav.matches) return;
+    clearTimeout(closeTimer);
+    openDropdown(t);
+  });
+  item.addEventListener('pointerleave', e => {
+    if (e.pointerType !== 'mouse' || !hoverNav.matches) return;
+    closeTimer = setTimeout(() => { item.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); }, 200);
+  });
+});
 document.addEventListener('click', e => { if (!e.target.closest('.nav__item')) closeDropdowns(); });
 
 addEventListener('keydown', e => {

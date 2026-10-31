@@ -3,11 +3,65 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
-// Schnellkontakt unten rechts: sichtbar unterhalb des Seitenkopfs, ausgeblendet über dem Footer
+// Schnellkontakt: ein Kontakt-Button unten rechts. Erscheint unterhalb des Seitenkopfs mit Abtropf-Effekt
+// (der Kontakt-Button oben zieht sich wie Flüssigkeit lang und tropft nach unten rechts), über dem Footer ausgeblendet.
 const fab = document.querySelector('.fab');
-let footerVisible = false;
-const updateFab = () => fab && fab.classList.toggle('is-visible', scrollY > innerHeight * .6 && !footerVisible);
-if (fab) new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
+const fabBtn = fab && fab.querySelector('.fab__btn');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let footerVisible = false, fabShown = false, hiddenBy = 'top', stopDrip = null;
+const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
+
+const drip = (dur = 1800) => {
+  const src = document.querySelector(matchMedia('(max-width: 991px)').matches ? '.menu-btn' : '.header .nav__cta');
+  const a = src.getBoundingClientRect(), b = fabBtn.getBoundingClientRect();
+  if (!a.width || !b.width) return;
+  const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v)), lerp = (x, y, t) => x + (y - x) * t;
+  const inOut = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, easeIn = t => t * t * t, easeOut = t => 1 - Math.pow(1 - t, 3);
+  const ax = a.left + a.width / 2, ay = a.top + a.height / 2, top0 = a.bottom - 6;
+  const bx = b.left + b.width / 2, by = b.top + b.height / 2;
+  const stretch = Math.min(220, (by - top0) * .45);
+  const layer = document.createElement('div'); layer.className = 'goo-layer'; document.body.appendChild(layer);
+  const blob = (r) => { const d = document.createElement('div'); d.style.borderRadius = r; layer.appendChild(d); return d; };
+  const place = (el, x, y, w, h) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px)`; };
+  const rest = blob('100px'), drop = blob('24px'), thread = Array.from({ length: 16 }, () => blob('50%'));
+  fab.classList.add('is-dripping');
+  let raf; const t0 = performance.now();
+  const end = () => { cancelAnimationFrame(raf); layer.remove(); fab.classList.remove('is-dripping'); stopDrip = null; };
+  const frame = now => {
+    const t = clamp((now - t0) / dur), pA = .5, pB = .82;
+    let dx, dy;
+    if (t < pA) { dx = ax; dy = lerp(top0, top0 + stretch, inOut(t / pA)); }
+    else { const u = easeIn(clamp((t - pA) / (pB - pA))); dx = lerp(ax, bx, u); dy = lerp(top0 + stretch, by, u); }
+    const det = clamp((t - pA) / .18), keep = Math.max(1 - easeOut(det), .0001);
+    place(rest, ax, ay + det * 10, a.width * lerp(1, .25, det) * keep, a.height * lerp(1, .5, det) * keep);
+    const tu = easeIn(clamp((t - pA) / (pB + .06 - pA))), tx = lerp(ax, dx, tu), ty = lerp(top0, dy, tu);
+    thread.forEach((el, i) => {
+      const s = (i + 1) / (thread.length + 1), r = 7 + 10 * Math.pow(1 - s, 3) * (1 - det) + 12 * Math.pow(s, 6);
+      place(el, lerp(tx, dx, s), lerp(ty, dy, s), r * 2, r * 2);
+    });
+    if (t < pB) { const sp = t < pA ? 1 : 1 + .25 * easeIn((t - pA) / (pB - pA)); place(drop, dx, dy, 48 / sp, 48 * sp); }
+    else { const u = easeOut((t - pB) / (1 - pB)); drop.style.borderRadius = '100px'; place(drop, bx, by, lerp(48, b.width, u), lerp(40, b.height, u) * (1 + .06 * Math.sin(u * Math.PI))); }
+    if (t < 1) raf = requestAnimationFrame(frame);
+    else { fab.classList.remove('is-dripping'); layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180 }).onfinish = end; }
+  };
+  raf = requestAnimationFrame(frame);
+  stopDrip = end;
+};
+
+const updateFab = () => {
+  if (!fab) return;
+  const show = scrollY > innerHeight * .6 && !footerVisible;
+  if (show === fabShown) return;
+  fabShown = show;
+  fab.classList.toggle('is-visible', show);
+  if (!show) { hiddenBy = footerVisible ? 'footer' : 'top'; if (stopDrip) stopDrip(); closeFab(); return; }
+  if (hiddenBy === 'top' && !reduceMotion) drip();
+};
+if (fab) {
+  new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
+  fabBtn.addEventListener('click', () => { const open = !fab.classList.contains('is-open'); fab.classList.toggle('is-open', open); fabBtn.setAttribute('aria-expanded', open); });
+  document.addEventListener('click', e => { if (!e.target.closest('.fab')) closeFab(); });
+}
 
 // Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
 let lastY = scrollY, ticking = false;
@@ -92,6 +146,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.nav__item')) c
 addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   closeDropdowns();
+  closeFab();
   if (header.classList.contains('is-open')) menuBtn.click();
 });
 

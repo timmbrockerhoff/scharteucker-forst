@@ -500,32 +500,47 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .contact-list a { text-decoration: none; }
 .contact-list a:hover { text-decoration: underline; }
 
-/* ---------- Schnellkontakt: runde Buttons unten rechts, erscheinen beim Scrollen ---------- */
+/* ---------- Schnellkontakt: ein Kontakt-Button unten rechts mit Auswahlmenü ---------- */
+.goo-defs { position: absolute; width: 0; height: 0; }
 .fab {
   position: fixed; right: 24px; bottom: 24px; z-index: 40;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
-  opacity: 0; visibility: hidden; transform: translateY(12px);
-  transition: opacity .3s, transform .3s var(--ease), visibility .3s;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
 }
-.fab.is-visible { opacity: 1; visibility: visible; transform: none; }
+.fab.is-visible { opacity: 1; visibility: visible; }
 .fab__btn {
-  display: flex; align-items: center; justify-content: flex-end;
-  height: 56px; min-width: 56px; padding: 0 16px; border-radius: 100px;
-  background: var(--green-600); color: var(--white); text-decoration: none;
-  font: 600 .95rem/1 var(--font-body);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
-  transition: background-color .25s;
+  display: flex; align-items: center; gap: 10px;
+  height: 56px; padding: 0 22px 0 18px; border: 0; border-radius: 100px;
+  background: var(--green-600); color: var(--white); font: 600 1rem/1 var(--font-body);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .25); cursor: pointer;
+  transition: background-color .25s, opacity .18s;
 }
 .fab__btn:hover { background: #0a6a33; }
-.fab__btn svg { width: 24px; height: 24px; flex: none; }
-.fab__label { max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width .35s var(--ease), opacity .25s, margin .35s var(--ease); }
-@media (hover: hover) {
-  .fab__btn:hover .fab__label { max-width: 12rem; opacity: 1; margin-right: 10px; }
+.fab__btn svg { width: 22px; height: 22px; flex: none; }
+.fab.is-dripping .fab__btn { opacity: 0; }
+.fab__menu {
+  position: relative;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+  opacity: 0; visibility: hidden; transform: translateY(8px);
+  transition: opacity .25s, transform .25s var(--ease), visibility .25s;
 }
-.fab__btn:focus-visible .fab__label { max-width: 12rem; opacity: 1; margin-right: 10px; }
+.fab__menu::after { content: ""; position: absolute; left: 0; right: 0; bottom: -10px; height: 10px; }
+@media (hover: hover) { .fab:hover .fab__menu { opacity: 1; visibility: visible; transform: none; } }
+.fab:focus-within .fab__menu, .fab.is-open .fab__menu { opacity: 1; visibility: visible; transform: none; }
+.fab__menu a {
+  display: flex; align-items: center; gap: 10px; white-space: nowrap;
+  padding: 11px 18px; border-radius: 100px;
+  background: var(--white); color: var(--green-900); text-decoration: none; font: 600 .95rem/1 var(--font-body);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .18); transition: background-color .2s;
+}
+.fab__menu a:hover { background: #efefee; }
+.fab__menu svg { width: 18px; height: 18px; flex: none; color: var(--green-600); }
+/* Abtropf-Effekt: Formen verschmelzen über den SVG-Filter #goo zu Flüssigkeit */
+.goo-layer { position: fixed; inset: 0; pointer-events: none; z-index: 46; filter: url(#goo); }
+.goo-layer div { position: absolute; left: 0; top: 0; background: var(--green-600); will-change: transform; }
 @media (max-width: 767px) {
-  .fab { right: 16px; bottom: 16px; gap: 10px; }
-  .fab__btn { height: 52px; min-width: 52px; padding: 0 14px; }
+  .fab { right: 16px; bottom: 16px; }
+  .fab__btn { height: 52px; }
 }
 
 /* ---------- Footer ---------- */

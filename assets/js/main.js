@@ -3,6 +3,12 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
+// Schnellkontakt unten rechts: sichtbar unterhalb des Seitenkopfs, ausgeblendet über dem Footer
+const fab = document.querySelector('.fab');
+let footerVisible = false;
+const updateFab = () => fab && fab.classList.toggle('is-visible', scrollY > innerHeight * .6 && !footerVisible);
+if (fab) new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
+
 // Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
 let lastY = scrollY, ticking = false;
 const updateHeader = () => {
@@ -16,6 +22,7 @@ const updateHeader = () => {
     header.classList.toggle('is-hidden', hide);
     lastY = y;
   }
+  updateFab();
   ticking = false;
 };
 updateHeader();

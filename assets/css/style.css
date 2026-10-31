@@ -500,6 +500,34 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .contact-list a { text-decoration: none; }
 .contact-list a:hover { text-decoration: underline; }
 
+/* ---------- Schnellkontakt: runde Buttons unten rechts, erscheinen beim Scrollen ---------- */
+.fab {
+  position: fixed; right: 24px; bottom: 24px; z-index: 40;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  opacity: 0; visibility: hidden; transform: translateY(12px);
+  transition: opacity .3s, transform .3s var(--ease), visibility .3s;
+}
+.fab.is-visible { opacity: 1; visibility: visible; transform: none; }
+.fab__btn {
+  display: flex; flex-direction: row-reverse; align-items: center;
+  height: 56px; min-width: 56px; padding: 0 16px; border-radius: 100px;
+  background: var(--green-600); color: var(--white); text-decoration: none;
+  font: 600 .95rem/1 var(--font-body);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+  transition: background-color .25s;
+}
+.fab__btn:hover { background: #0a6a33; }
+.fab__btn svg { width: 24px; height: 24px; flex: none; }
+.fab__label { max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width .35s var(--ease), opacity .25s, margin .35s var(--ease); }
+@media (hover: hover) {
+  .fab__btn:hover .fab__label { max-width: 12rem; opacity: 1; margin-right: 10px; }
+}
+.fab__btn:focus-visible .fab__label { max-width: 12rem; opacity: 1; margin-right: 10px; }
+@media (max-width: 767px) {
+  .fab { right: 16px; bottom: 16px; gap: 10px; }
+  .fab__btn { height: 52px; min-width: 52px; padding: 0 14px; }
+}
+
 /* ---------- Footer ---------- */
 .footer { background: var(--green-900); color: var(--light); position: relative; overflow: hidden; padding-top: 6rem; }
 .footer .deco-tree::before { top: -2rem; right: -10%; }

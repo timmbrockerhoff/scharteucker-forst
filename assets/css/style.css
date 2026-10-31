@@ -238,9 +238,9 @@ h1, h2, h3, h4 { font-weight: 700; }
   transition: opacity .25s, transform .25s var(--ease), visibility .25s;
 }
 .nav__item.is-open .dropdown { opacity: 1; visibility: visible; transform: none; }
-.dropdown__grid { list-style: none; display: grid; grid-template-columns: repeat(4, 216px); gap: 8px; }
+.dropdown__grid { list-style: none; display: grid; grid-template-columns: repeat(4, 264px); gap: 8px; }
 .dropdown__item {
-  display: flex; flex-direction: column; gap: 2px;
+  display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; row-gap: 2px; align-content: start;
   padding: 12px; border-radius: 8px;
   text-decoration: none; color: var(--green-900);
   transition: background-color .3s;
@@ -248,6 +248,15 @@ h1, h2, h3, h4 { font-weight: 700; }
 .dropdown__item b { font-weight: 600; font-size: 1rem; line-height: 1.5; }
 .dropdown__item span { font-weight: 400; font-size: 1rem; line-height: 1.5; color: #3d4a40; hyphens: manual; -webkit-hyphens: manual; }
 .dropdown__item:hover, .dropdown__item[aria-current="page"] { background: #eef1ec; }
+/* Symbol links neben Titel und Beschreibung, invertiert bei Hover/aktiver Seite */
+.dropdown__item .dropdown__icon {
+  grid-row: span 2; width: 40px; height: 40px; border-radius: 10px;
+  display: grid; place-items: center; line-height: 0;
+  background: #eef1ec; color: var(--green-600);
+  transition: background-color .3s, color .3s;
+}
+.dropdown__icon svg { width: 22px; height: 22px; }
+.dropdown__item:hover .dropdown__icon, .dropdown__item[aria-current="page"] .dropdown__icon { background: var(--green-600); color: #fff; }
 
 
 .menu-btn {
@@ -542,7 +551,9 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   }
   .nav__item.is-open .dropdown { display: block; }
   .dropdown__grid { grid-template-columns: 1fr; gap: 2px; }
-  .dropdown__item { padding: 10px 12px; }
+  .dropdown__item { padding: 10px 12px; grid-template-columns: 32px 1fr; }
+  .dropdown__item .dropdown__icon { width: 32px; height: 32px; border-radius: 8px; }
+  .dropdown__icon svg { width: 18px; height: 18px; }
   .dropdown__item span { font-size: .9rem; }
   .nav__aside { flex-direction: column; align-items: stretch; gap: 1rem; margin-top: 1.5rem; }
   .nav__text { text-align: center; padding: 8px 0; }

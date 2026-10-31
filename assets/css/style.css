@@ -1,15 +1,10 @@
 /* Scharteucker Forst – Stylesheet */
 
 @font-face {
-  font-family: "Switzer";
-  src: url("../fonts/switzer-400.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Switzer";
-  src: url("../fonts/switzer-500.woff2") format("woff2");
-  font-weight: 500;
+  font-family: "Saira";
+  src: url("../fonts/saira.woff2") format("woff2");
+  font-weight: 100 900;
+  font-stretch: 50% 125%;
   font-display: swap;
 }
 @font-face {
@@ -27,7 +22,7 @@
   --light: #e7e7e6;
   --grey: #dddddd;
   --white: #fafafa;
-  --font-display: "Switzer", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Saira", "Arial Black", Arial, sans-serif;
   --font-body: "Plus Jakarta Sans", Arial, sans-serif;
   --header-h: 88px;
   --section-y: 112px;
@@ -79,19 +74,21 @@ h1, h2, h3, h4 { font-weight: 700; }
 .rings { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
 /* ---------- Typografie ---------- */
+/* Display-Schrift Saira breit + Versalien: freier Ersatz für Tactic Sans Med von ksmforestandland.com */
 .display {
   font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1;
-  font-size: clamp(2.6rem, 4.8vw, 4.75rem);
-  letter-spacing: -.03em;
+  font-stretch: 122%;
+  font-weight: 650;
+  text-transform: uppercase;
+  line-height: 1.08;
+  font-size: clamp(2.25rem, 4.6vw, 4.25rem);
 }
 .tagline {
   display: block;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: .85rem;
-  letter-spacing: .1em;
+  font-family: var(--font-display);
+  font-stretch: 122%;
+  font-weight: 550;
+  font-size: 1rem;
   line-height: 1.2;
   text-transform: uppercase;
   color: var(--sage);
@@ -99,10 +96,8 @@ h1, h2, h3, h4 { font-weight: 700; }
 }
 .section--light .tagline, .section--grey .tagline { color: var(--green-600); }
 .cta .tagline { color: var(--sage); }
-/* Überschriften in Switzer (kreativ), alles Funktionale bleibt in Plus Jakarta Sans */
-.h2, .h3, .prose h2, .prose h3, .step h3, .cards h3, .card h3 { font-family: var(--font-display); font-weight: 500; letter-spacing: -.02em; }
-.h2, .prose h2 { font-weight: 500; letter-spacing: -.035em; }
-.h2 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); line-height: 1.1; }
+/* Abschnitts- und Kartenüberschriften wie bei KSM in Plus Jakarta Sans fett */
+.h2 { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.14; letter-spacing: -.01em; }
 .h2--sm { font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.22; }
 .h3 { font-size: 1.5rem; line-height: 1.28; }
 .lead { font-size: 1.25rem; line-height: 1.5; }
@@ -342,7 +337,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .4rem;
 }
 .fact b {
-  font-family: var(--font-display); font-weight: 500;
+  font-family: var(--font-display); font-stretch: 122%; font-weight: 650;
   font-size: clamp(1.6rem, 2.5vw, 2.3rem); line-height: 1.1; color: var(--green-600);
 }
 .fact span { font-size: .95rem; line-height: 1.35; }
@@ -410,7 +405,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .section--dark .cards .num { color: var(--sage); }
 .cards h3 { font-size: 1.2rem; line-height: 1.3; }
 .cards .num {
-  font-family: var(--font-body); font-weight: 600; text-transform: uppercase; letter-spacing: .1em; color: var(--green-600); font-size: .8rem;
+  font-family: var(--font-display); font-stretch: 122%; font-weight: 550; text-transform: uppercase; color: var(--green-600); font-size: .9rem;
 }
 .cards--compact > li { padding: 1.4rem 1.6rem; flex-direction: row; align-items: center; gap: .9rem; font-weight: 500; }
 .cards--compact > li::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--sage); flex: none; }
@@ -428,7 +423,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   width: 3.5rem; height: 3.5rem; border-radius: 50%;
   display: grid; place-items: center;
   background: var(--green-800); color: var(--light);
-  font-family: var(--font-display); font-weight: 500; font-size: 1.35rem;
+  font-family: var(--font-display); font-stretch: 122%; font-weight: 650; font-size: 1.2rem;
   position: relative; z-index: 1;
 }
 .step::after { content: ""; position: absolute; left: 1.75rem; top: 3.5rem; bottom: 0; width: 1px; background: rgba(0, 25, 6, .2); }

@@ -161,8 +161,8 @@ h1, h2, h3, h4 { font-weight: 700; }
   mask: url("../img/logo-symbol.png") center / contain no-repeat;
 }
 .logo__text { display: flex; flex-direction: column; font-family: var(--font-body); text-transform: uppercase; line-height: 1; }
-.logo__text b { font-weight: 800; font-size: calc(var(--logo-h) * .385); letter-spacing: .01em; }
-.logo__text small { font-weight: 400; font-size: calc(var(--logo-h) * .24); letter-spacing: .52em; margin-top: calc(var(--logo-h) * .12); }
+.logo__text b { font-weight: 800; font-size: calc(var(--logo-h) * .395); letter-spacing: .01em; }
+.logo__text small { font-weight: 400; font-size: calc(var(--logo-h) * .24); letter-spacing: .52em; margin-right: -.52em; margin-top: calc(var(--logo-h) * .12); }
 
 /* ---------- Header / Navigation (nach radiatinghope.org) ----------
    Keine Leiste: Logo links, Milchglas-Box mittig, Telefon + runder Button rechts.

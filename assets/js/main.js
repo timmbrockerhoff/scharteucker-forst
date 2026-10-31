@@ -3,10 +3,22 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
-// Header wird beim Scrollen dunkel (nur auf der Startseite transparent)
-const onScroll = () => header.classList.toggle('is-scrolled', scrollY > 40);
-onScroll();
-addEventListener('scroll', onScroll, { passive: true });
+// Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen nur die Mittel-Box zeigen
+let lastY = scrollY, ticking = false;
+const updateHeader = () => {
+  const under = document.elementsFromPoint(innerWidth / 2, header.offsetHeight / 2)
+    .find(el => !header.contains(el) && !el.classList.contains('rings'));
+  header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey'));
+  const y = scrollY;
+  if (Math.abs(y - lastY) > 6) {
+    header.classList.toggle('is-compact', y > lastY && y > 150 && !header.classList.contains('is-open'));
+    lastY = y;
+  }
+  ticking = false;
+};
+updateHeader();
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(updateHeader); } }, { passive: true });
+addEventListener('resize', updateHeader);
 
 // Hero-Video anhalten, wenn reduzierte Bewegung gewünscht ist (dann bleibt das Standbild)
 const heroVideo = document.querySelector('video.hero__media');

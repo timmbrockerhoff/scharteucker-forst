@@ -9,16 +9,15 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/switzer-500.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/style.css?v=12">
+<link rel="stylesheet" href="assets/css/style.css?v=13">
 <script>document.documentElement.classList.add('js')</script>
-<script src="assets/js/main.js?v=12" defer></script>
+<script src="assets/js/main.js?v=13" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Zum Inhalt springen</a>
 <header class="header">
   <div class="container header__inner">
-    <a class="logo" href="index.html"><img src="assets/img/logo.png" alt="Scharteucker Forst – zur Startseite" width="1246" height="275"></a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menü"><span></span></button>
+    <a class="logo" href="index.html"><img class="logo__light" src="assets/img/logo.png" alt="Scharteucker Forst – zur Startseite" width="1246" height="275"><img class="logo__dark" src="assets/img/logo-dunkel.png" alt="" width="1246" height="275"></a>
     <nav class="nav" id="nav" aria-label="Hauptnavigation">
       <ul class="nav__list">
         <li class="nav__item"><a class="nav__link" href="produkte-preise.html" aria-current="true">Produkte <svg class="nav__chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a><ul class="dropdown"><li><a href="produkte-preise.html">Alle Produkte & Holzarten</a></li><li><a href="brennholz.html">Brennholz</a></li><li><a href="schnittholz.html">Schnittholz</a></li><li><a href="gps-holz.html" aria-current="page">GPS-Holz</a></li></ul></li>
@@ -26,8 +25,12 @@
         <li class="nav__item"><a class="nav__link" href="wir-ueber-uns.html">Über uns</a></li>
         <li class="nav__item"><a class="nav__link" href="rund-ums-holz.html">Nachhaltigkeit</a></li>
       </ul>
-      <a class="btn nav__cta" href="kontakt.html">Kontakt</a>
+      <div class="nav__aside">
+        <a class="nav__text" href="tel:+491721456171">0172 1456171</a>
+        <a class="btn nav__cta" href="kontakt.html">Kontakt</a>
+      </div>
     </nav>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menü"><span></span></button>
   </div>
 </header>
 <main id="main">

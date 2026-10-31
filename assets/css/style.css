@@ -280,7 +280,7 @@ h1, h2, h3, h4 { font-weight: 700; }
 .hero {
   position: relative;
   min-height: 100vh; min-height: 100svh;
-  display: flex; align-items: flex-end;
+  display: flex; align-items: center;
   background: var(--green-800);
   color: var(--light);
   overflow: hidden;
@@ -289,10 +289,12 @@ h1, h2, h3, h4 { font-weight: 700; }
 .hero::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .58); }
 .hero__inner {
   position: relative; z-index: 1;
-  display: grid; grid-template-columns: 1fr minmax(0, 28rem); align-items: end; gap: 3rem;
-  padding-block: calc(var(--header-h) + 4rem) 5.5rem;
+  /* Überschrift, Text und Button untereinander, Block leicht oberhalb der Mitte (unten Platz für die Balken) */
+  display: grid; grid-template-columns: 1fr; justify-items: start; gap: 2rem;
+  padding-block: calc(var(--header-h) + 2rem) 8rem;
 }
-.hero__side p { margin-bottom: 2rem; }
+.hero__side { max-width: 34rem; }
+.hero__side p { margin-bottom: 2.5rem; }
 /* Fortschrittsbalken je Videoclip (wie vantara.in): füllen sich nacheinander, Klick springt zum Clip */
 .hero__progress { position: absolute; z-index: 2; left: 50%; bottom: 1.5rem; translate: -50% 0; width: min(28rem, 90%); display: flex; gap: 8px; }
 .hero__progress button { flex: 1; padding: 10px 0; border: 0; background: none; cursor: pointer; }
@@ -575,7 +577,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   body.menu-open { overflow: hidden; }
 
   .hero__inner, .page-hero__inner, .split-head, .feature-head, .split, .slider, .cta, .footer__grid { grid-template-columns: 1fr; }
-  .hero__inner { gap: 2rem; }
+  .hero__inner { gap: 1.5rem; }
   .split--reverse > :first-child { order: 0; }
   .tiles { grid-template-columns: repeat(2, 1fr); }
   .tile { min-height: 380px; }

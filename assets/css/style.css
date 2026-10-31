@@ -93,6 +93,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   color: var(--sage);
   margin-bottom: 1rem;
 }
+.section--light .tagline, .section--grey .tagline { color: var(--green-600); }
 .h2 { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.14; letter-spacing: -.01em; }
 .h2--sm { font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.22; }
 .h3 { font-size: 1.5rem; line-height: 1.28; }

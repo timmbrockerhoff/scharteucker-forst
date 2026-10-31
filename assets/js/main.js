@@ -8,6 +8,10 @@ const onScroll = () => header.classList.toggle('is-scrolled', scrollY > 40);
 onScroll();
 addEventListener('scroll', onScroll, { passive: true });
 
+// Hero-Video anhalten, wenn reduzierte Bewegung gewünscht ist (dann bleibt das Standbild)
+const heroVideo = document.querySelector('video.hero__media');
+if (heroVideo && matchMedia('(prefers-reduced-motion: reduce)').matches) heroVideo.pause();
+
 // Mobiles Menü
 menuBtn.addEventListener('click', () => {
   const open = header.classList.toggle('is-open');

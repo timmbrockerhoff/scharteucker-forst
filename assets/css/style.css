@@ -550,7 +550,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
     background: none; box-shadow: none; padding: .5rem 0 .75rem;
   }
   .nav__item.is-open .dropdown { display: block; }
-  .dropdown__grid { grid-template-columns: 1fr; gap: 2px; }
+  .dropdown__grid { grid-template-columns: 1fr; gap: 2px; width: auto; max-width: none; }
   .dropdown__item { padding: 10px 12px; grid-template-columns: 32px 1fr; }
   .dropdown__item .dropdown__icon { width: 32px; height: 32px; border-radius: 8px; }
   .dropdown__icon svg { width: 18px; height: 18px; }

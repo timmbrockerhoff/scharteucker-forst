@@ -246,7 +246,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   transition: background-color .3s;
 }
 .dropdown__item b { font-weight: 600; font-size: 1rem; line-height: 1.5; }
-.dropdown__item span { font-weight: 400; font-size: 1rem; line-height: 1.5; color: #3d4a40; hyphens: auto; -webkit-hyphens: auto; }
+.dropdown__item span { font-weight: 400; font-size: 1rem; line-height: 1.5; color: #3d4a40; hyphens: manual; -webkit-hyphens: manual; }
 .dropdown__item:hover, .dropdown__item[aria-current="page"] { background: #eef1ec; }
 
 

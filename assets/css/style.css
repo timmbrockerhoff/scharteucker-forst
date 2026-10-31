@@ -289,11 +289,11 @@ h1, h2, h3, h4 { font-weight: 700; }
 .hero::after { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .58); }
 .hero__inner {
   position: relative; z-index: 1;
-  /* Überschrift, Text und Button untereinander, Block leicht oberhalb der Mitte (unten Platz für die Balken) */
-  display: grid; grid-template-columns: 1fr; justify-items: start; gap: 2rem;
+  /* Überschrift, Text und Button zentriert untereinander, Block leicht oberhalb der Mitte (unten Platz für die Balken) */
+  display: grid; grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 2rem;
   padding-block: calc(var(--header-h) + 2rem) 8rem;
 }
-.hero__side { max-width: 34rem; }
+.hero__side { max-width: 34rem; margin-inline: auto; }
 .hero__side p { margin-bottom: 2.5rem; }
 /* Fortschrittsbalken je Videoclip (wie vantara.in): füllen sich nacheinander, Klick springt zum Clip */
 .hero__progress { position: absolute; z-index: 2; left: 50%; bottom: 1.5rem; translate: -50% 0; width: min(28rem, 90%); display: flex; gap: 8px; }

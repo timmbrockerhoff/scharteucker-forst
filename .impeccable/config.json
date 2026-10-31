@@ -17,6 +17,15 @@
         ],
         "createdAt": "2026-10-31T14:41:39.172Z",
         "reason": "Fehlalarm: Innenabstand kommt aus .section/.container/.tile__body/.cta__body/.footer__bottom in style.css, die der statische Scan nicht auflöst"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-31T15:49:36.415Z",
+        "reason": "Fehlalarm: weiße Header-Navigation (#fafafa) liegt oben über dem dunklen Hero-Video und schaltet per JS (.on-light) über hellen Sektionen auf #001906 um; live auf GitHub Pages geprüft"
       }
     ]
   }

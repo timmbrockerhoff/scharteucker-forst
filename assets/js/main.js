@@ -106,7 +106,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   };
 
   const loop = () => {
-    t += .016;
+    t += .0065;
     mouse.sx += (mouse.x - mouse.sx) * .08;
     mouse.sy += (mouse.y - mouse.sy) * .08;
     mouse.k += ((mouse.x > -1e3 ? 1 : 0) - mouse.k) * .05;

@@ -30,8 +30,20 @@ menuBtn.addEventListener('click', () => {
   menuBtn.setAttribute('aria-expanded', open);
   document.body.classList.toggle('menu-open', open);
 });
+// Untermenüs: per Klick öffnen, Klick daneben oder Escape schließt
+const toggles = document.querySelectorAll('.nav__toggle');
+const closeDropdowns = () => toggles.forEach(t => { t.parentElement.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); });
+toggles.forEach(t => t.addEventListener('click', () => {
+  const open = !t.parentElement.classList.contains('is-open');
+  closeDropdowns();
+  if (open) { t.parentElement.classList.add('is-open'); t.setAttribute('aria-expanded', 'true'); }
+}));
+document.addEventListener('click', e => { if (!e.target.closest('.nav__item')) closeDropdowns(); });
+
 addEventListener('keydown', e => {
-  if (e.key === 'Escape' && header.classList.contains('is-open')) menuBtn.click();
+  if (e.key !== 'Escape') return;
+  closeDropdowns();
+  if (header.classList.contains('is-open')) menuBtn.click();
 });
 
 // Einblenden beim Scrollen

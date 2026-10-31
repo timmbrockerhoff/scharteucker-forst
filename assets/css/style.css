@@ -509,7 +509,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 }
 .fab.is-visible { opacity: 1; visibility: visible; transform: none; }
 .fab__btn {
-  display: flex; flex-direction: row-reverse; align-items: center;
+  display: flex; align-items: center; justify-content: flex-end;
   height: 56px; min-width: 56px; padding: 0 16px; border-radius: 100px;
   background: var(--green-600); color: var(--white); text-decoration: none;
   font: 600 .95rem/1 var(--font-body);

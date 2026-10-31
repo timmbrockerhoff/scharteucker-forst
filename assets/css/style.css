@@ -69,8 +69,9 @@ h1, h2, h3, h4 { font-weight: 700; }
 .section { padding-block: var(--section-y); position: relative; overflow: hidden; }
 .section--dark { background: var(--green-800); color: var(--light); }
 .section--darkest { background: var(--green-900); color: var(--light); }
-.section--grey { background: var(--grey); }
-.section--light { background: var(--light); }
+.section--grey { background: rgba(0, 0, 0, .045); }   /* halbtransparent, damit die Jahresringe durchscheinen */
+.section--light { background: transparent; }
+.rings { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
 /* ---------- Typografie ---------- */
 .display {

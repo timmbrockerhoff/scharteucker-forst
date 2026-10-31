@@ -1,1 +1,6 @@
 Redirect 301 /anfahrt.html /kontakt.html
+Redirect 301 /holz-hackschnitzel.html /holzernte.html
+Redirect 301 /waldpflug-im-einsatz.html /naturverjuengung.html
+Redirect 301 /pflanzung.html /naturverjuengung.html
+Redirect 301 /neophytenbeseitigung.html /waldpflege-schutz.html
+Redirect 301 /rund-ums-holz.html /wir-ueber-uns.html

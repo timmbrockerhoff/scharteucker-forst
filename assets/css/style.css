@@ -506,6 +506,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 @media (max-width: 991px) {
   :root { --section-y: 80px; --header-h: 76px; }
   .header__inner { grid-template-columns: 1fr auto; }
+  .header.is-open { background: var(--light); }
   .menu-btn { display: inline-flex; grid-column: 2; }
   .nav {
     position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0;

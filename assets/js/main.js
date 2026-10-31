@@ -51,7 +51,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   slider.querySelector('[data-next]').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
 });
 
-// Jahresringe im Hintergrund der hellen Sektionen: atmen langsam, weichen dem Mauszeiger aus
+// Jahresringe im Hintergrund der hellen Sektionen: atmen langsam, folgen der Maus leicht, Lichtkegel am Zeiger
 (() => {
   const light = document.querySelectorAll('.section--light, .section--grey');
   if (!light.length) return;
@@ -63,7 +63,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hash = i => { const s = Math.sin(i * 12.9898) * 43758.5453; return s - Math.floor(s); };
   const mouse = { x: -1e4, y: -1e4, sx: -1e4, sy: -1e4, k: 0 };
-  let w = 0, h = 0, t = 0, raf = 0;
+  let w = 0, h = 0, t = 0, raf = 0, ox = 0, oy = 0;
   const visible = new Set();
 
   const resize = () => {
@@ -76,7 +76,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   const draw = () => {
     ctx.clearRect(0, 0, w, h);
     // Mittelpunkt der „Baumscheibe“ rechts oben, wandert beim Scrollen leicht mit
-    const cx = w * .72, cy = h * .38 - scrollY * .12;
+    const cx = w * .72 + ox, cy = h * .38 - scrollY * .12 + oy;
     const maxR = Math.hypot(Math.max(cx, w - cx), Math.max(cy, h - cy)) + 60;
     ctx.strokeStyle = 'rgba(149, 178, 146, .3)';
     ctx.lineJoin = 'round';
@@ -89,10 +89,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
       for (let j = 0; j < n; j++) {
         const a = j / n * Math.PI * 2;
         const wob = amp * (.55 * Math.sin(3 * a + i * .9 + t * .35) + .3 * Math.sin(5 * a - i * .5 - t * .25) + .25 * Math.sin(2 * a + i * 1.7 + t * .18));
-        let x = cx + Math.cos(a) * (r + wob), y = cy + Math.sin(a) * (r + wob);
-        const dx = x - mouse.sx, dy = y - mouse.sy, d = Math.hypot(dx, dy), R = 170;
-        if (d < R && d > 0) { const f = mouse.k * 42 * (1 - d / R) ** 2 / d; x += dx * f; y += dy * f; }
-        pts.push(x, y);
+        pts.push(cx + Math.cos(a) * (r + wob), cy + Math.sin(a) * (r + wob));
       }
       ctx.lineWidth = 7 + 9 * hash(i + 7);              // unterschiedlich dicke Jahresringe
       ctx.beginPath();
@@ -103,13 +100,30 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
       }
       ctx.stroke();
     }
+    // Lichtkegel: färbt nur die Ringe rund um den Zeiger dunkler, ohne sie zu verformen
+    if (mouse.k > .01) {
+      const g = ctx.createRadialGradient(mouse.sx, mouse.sy, 0, mouse.sx, mouse.sy, 240);
+      g.addColorStop(0, `rgba(0, 79, 35, ${.45 * mouse.k})`);
+      g.addColorStop(1, 'rgba(0, 79, 35, 0)');
+      ctx.globalCompositeOperation = 'source-atop';
+      ctx.fillStyle = g;
+      ctx.fillRect(mouse.sx - 240, mouse.sy - 240, 480, 480);
+      ctx.globalCompositeOperation = 'source-over';
+    }
   };
 
   const loop = () => {
     t += .0065;
-    mouse.sx += (mouse.x - mouse.sx) * .08;
-    mouse.sy += (mouse.y - mouse.sy) * .08;
-    mouse.k += ((mouse.x > -1e3 ? 1 : 0) - mouse.k) * .05;
+    const on = mouse.x > -1e3;
+    if (on) {
+      if (mouse.k < .01) { mouse.sx = mouse.x; mouse.sy = mouse.y; }
+      mouse.sx += (mouse.x - mouse.sx) * .1;
+      mouse.sy += (mouse.y - mouse.sy) * .1;
+    }
+    mouse.k += ((on ? 1 : 0) - mouse.k) * .05;
+    // ganze Baumscheibe wandert sanft ein Stück Richtung Maus
+    ox += ((on ? (mouse.x - w / 2) * .05 : 0) - ox) * .04;
+    oy += ((on ? (mouse.y - h / 2) * .05 : 0) - oy) * .04;
     draw();
     raf = visible.size ? requestAnimationFrame(loop) : 0;
   };

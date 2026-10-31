@@ -26,6 +26,23 @@ addEventListener('resize', updateHeader);
 const heroVideo = document.querySelector('video.hero__media');
 if (heroVideo && matchMedia('(prefers-reduced-motion: reduce)').matches) heroVideo.pause();
 
+// Fortschrittsbalken unter dem Hero-Text: ein Balken je Clip im zusammengeschnittenen Video
+const progress = document.querySelector('.hero__progress');
+if (heroVideo && progress) {
+  const starts = progress.dataset.segments.split(',').map(Number);
+  const bars = [...progress.querySelectorAll('button')];
+  const tick = () => {
+    const t = heroVideo.currentTime, end = heroVideo.duration || Infinity;
+    bars.forEach((bar, i) => {
+      const s = starts[i], e = starts[i + 1] ?? end;
+      bar.firstElementChild.style.setProperty('--p', Math.min(1, Math.max(0, (t - s) / (e - s))));
+    });
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+  bars.forEach((bar, i) => bar.addEventListener('click', () => { heroVideo.currentTime = starts[i] + .01; heroVideo.play(); }));
+}
+
 // Mobiles Menü
 menuBtn.addEventListener('click', () => {
   const open = header.classList.toggle('is-open');

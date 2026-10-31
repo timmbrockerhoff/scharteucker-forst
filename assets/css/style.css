@@ -293,6 +293,12 @@ h1, h2, h3, h4 { font-weight: 700; }
   padding-block: calc(var(--header-h) + 4rem) 5.5rem;
 }
 .hero__side p { margin-bottom: 2rem; }
+/* Fortschrittsbalken je Videoclip (wie vantara.in): füllen sich nacheinander, Klick springt zum Clip */
+.hero__progress { display: flex; gap: 8px; margin-bottom: 1.75rem; }
+.hero__progress button { flex: 1; padding: 10px 0; border: 0; background: none; cursor: pointer; }
+.hero__progress span { display: block; height: 2px; position: relative; overflow: hidden; background: rgba(250, 250, 250, .3); }
+.hero__progress span::after { content: ""; position: absolute; inset: 0; background: var(--white); transform: scaleX(var(--p, 0)); transform-origin: left; }
+.hero__progress button:hover span { background: rgba(250, 250, 250, .5); }
 
 /* ---------- Unterseiten-Hero ---------- */
 .page-hero { background: var(--green-800); color: var(--light); padding-top: calc(var(--header-h) + 7rem); padding-bottom: 5rem; }
@@ -518,6 +524,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .js [data-reveal] { opacity: 1; transform: none; }
   .reveal-text .w { opacity: 1; }
+  .hero__progress { display: none; }
 }
 
 /* ---------- Responsive (Breakpoints wie Vorbild) ---------- */

@@ -238,7 +238,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   transition: opacity .25s, transform .25s var(--ease), visibility .25s;
 }
 .nav__item.is-open .dropdown { opacity: 1; visibility: visible; transform: none; }
-.dropdown__grid { list-style: none; display: grid; grid-template-columns: repeat(4, 264px); gap: 8px; }
+.dropdown__grid { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 264px)); gap: 8px; width: max-content; max-width: calc(100vw - 2rem); }
 .dropdown__item {
   display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; row-gap: 2px; align-content: start;
   padding: 12px; border-radius: 8px;

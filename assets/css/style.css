@@ -585,4 +585,4 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 }
 
 /* Lange deutsche Wörter trennen */
-.h2, .h3, .card h3, .tile h3 { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+.h3, .card h3, .tile h3 { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }

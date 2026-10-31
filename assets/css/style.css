@@ -294,7 +294,7 @@ h1, h2, h3, h4 { font-weight: 700; }
 }
 .hero__side p { margin-bottom: 2rem; }
 /* Fortschrittsbalken je Videoclip (wie vantara.in): füllen sich nacheinander, Klick springt zum Clip */
-.hero__progress { display: flex; gap: 8px; margin-bottom: 1.75rem; }
+.hero__progress { position: absolute; z-index: 2; left: 50%; bottom: 1.5rem; translate: -50% 0; width: min(28rem, 90%); display: flex; gap: 8px; }
 .hero__progress button { flex: 1; padding: 10px 0; border: 0; background: none; cursor: pointer; }
 .hero__progress span { display: block; height: 2px; position: relative; overflow: hidden; background: rgba(250, 250, 250, .3); }
 .hero__progress span::after { content: ""; position: absolute; inset: 0; background: var(--white); transform: scaleX(var(--p, 0)); transform-origin: left; }

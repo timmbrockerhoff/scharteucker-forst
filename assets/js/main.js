@@ -11,7 +11,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let footerVisible = false, fabShown = false, hiddenBy = 'top', stopDrip = null;
 const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
 
-const drip = (dur = 1500) => {
+const drip = (dur = 1600) => {
   const src = document.querySelector(matchMedia('(max-width: 991px)').matches ? '.menu-btn' : '.header .nav__cta');
   const a = src.getBoundingClientRect(), b = fabBtn.getBoundingClientRect();
   if (!a.width || !b.width) return;
@@ -20,7 +20,7 @@ const drip = (dur = 1500) => {
   const ax = a.left + a.width / 2, ay = a.top + a.height / 2;
   const bx = b.left + b.width / 2, by = b.top + b.height / 2;
   // Wegpunkte: Ablösen unter dem Button oben, weicher Bogen, Ankunft knapp über dem Ziel
-  const p0 = { x: ax, y: a.bottom - 4 }, p1 = { x: ax, y: a.bottom + 56 }, p2 = { x: bx, y: by - 64 };
+  const p0 = { x: ax, y: a.bottom - 4 }, p1 = { x: ax, y: a.bottom + 56 }, p2 = { x: bx, y: by - 46 };
   const ctrl = { x: lerp(p1.x, p2.x, .85), y: lerp(p1.y, p2.y, .25) };
   const bez = u => ({ x: (1 - u) ** 2 * p1.x + 2 * (1 - u) * u * ctrl.x + u * u * p2.x, y: (1 - u) ** 2 * p1.y + 2 * (1 - u) * u * ctrl.y + u * u * p2.y });
   const layer = document.createElement('div'); layer.className = 'goo-layer'; document.body.appendChild(layer);
@@ -30,7 +30,7 @@ const drip = (dur = 1500) => {
   fab.classList.add('is-dripping');
   let raf, prev = null; const t0 = performance.now();
   const end = () => { cancelAnimationFrame(raf); layer.remove(); fab.classList.remove('is-dripping'); stopDrip = null; };
-  const P1 = .26, P2 = .76;
+  const P1 = .3, P2 = .74;
   const frame = now => {
     const t = clamp((now - t0) / dur);
     let pos, size;
@@ -45,13 +45,13 @@ const drip = (dur = 1500) => {
     const det = clamp((t - P1 * .8) / .14), keep = Math.max(1 - easeOut(det), .0001);
     place(rest, ax, ay + det * 6, a.width * lerp(1, .3, det) * keep, a.height * lerp(1, .55, det) * keep);
     // Ende: am Ziel entsteht der Button, der ankommende Tropfen verschmilzt damit
-    const g = clamp((t - P2 + .06) / (1 - P2 + .06)), gw = easeOut(g);
+    const g = clamp((t - P2 + .1) / (1 - P2 + .1)), gw = easeOut(g);
     const wob = 1 + .05 * Math.sin(clamp((t - .9) / .1) * Math.PI);
     place(pool, bx, by, lerp(0, b.width, gw) * wob + .0001, lerp(0, b.height, gw) / wob + .0001);
     neck.forEach((el, i) => {
       const s = (i + 1) / (neck.length + 1);
       if (t < P1) { const r = 5 + 3 * (1 - s); place(el, ax, lerp(a.bottom - 2, pos.y, s), r * 2 * keep, r * 2 * keep); }
-      else if (t > P2) { const r = 6 * clamp((t - P2) / .1) * (1 - clamp((t - .94) / .06)); place(el, bx, lerp(pos.y, by - b.height * .3, s), r * 2, r * 2); }
+      else if (t > P2) { const r = 10 * clamp((t - P2 + .04) / .1) * (1 - clamp((t - .95) / .05)); place(el, bx, lerp(pos.y, by - b.height * .3, s), r * 2, r * 2); }
       else place(el, pos.x, pos.y, 0, 0);
     });
     if (t < 1) raf = requestAnimationFrame(frame);

@@ -103,7 +103,7 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
     // Lichtkegel: färbt nur die Ringe rund um den Zeiger dunkler, ohne sie zu verformen
     if (mouse.k > .01) {
       const g = ctx.createRadialGradient(mouse.sx, mouse.sy, 0, mouse.sx, mouse.sy, 240);
-      g.addColorStop(0, `rgba(0, 79, 35, ${.45 * mouse.k})`);
+      g.addColorStop(0, `rgba(0, 79, 35, ${.8 * mouse.k})`);
       g.addColorStop(1, 'rgba(0, 79, 35, 0)');
       ctx.globalCompositeOperation = 'source-atop';
       ctx.fillStyle = g;

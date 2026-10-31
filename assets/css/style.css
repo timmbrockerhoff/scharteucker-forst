@@ -1,9 +1,15 @@
 /* Scharteucker Forst – Stylesheet */
 
 @font-face {
-  font-family: "Literata";
-  src: url("../fonts/literata.woff2") format("woff2");
-  font-weight: 200 900;
+  font-family: "Sentient";
+  src: url("../fonts/sentient-300.woff2") format("woff2");
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sentient";
+  src: url("../fonts/sentient-400.woff2") format("woff2");
+  font-weight: 400;
   font-display: swap;
 }
 @font-face {
@@ -21,7 +27,7 @@
   --light: #e7e7e6;
   --grey: #dddddd;
   --white: #fafafa;
-  --font-display: "Literata", Georgia, serif;
+  --font-display: "Sentient", Georgia, serif;
   --font-body: "Plus Jakarta Sans", Arial, sans-serif;
   --header-h: 88px;
   --section-y: 112px;
@@ -78,7 +84,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   font-weight: 300;
   line-height: 1.04;
   font-size: clamp(2.6rem, 5.4vw, 5rem);
-  letter-spacing: -.015em;
+  letter-spacing: -.03em;
 }
 .tagline {
   display: block;
@@ -93,8 +99,8 @@ h1, h2, h3, h4 { font-weight: 700; }
 }
 .section--light .tagline, .section--grey .tagline { color: var(--green-600); }
 .cta .tagline { color: var(--sage); }
-/* Überschriften in Literata (kreativ), alles Funktionale bleibt in Plus Jakarta Sans */
-.h2, .h3, .prose h2, .prose h3, .step h3, .cards h3, .card h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: -.01em; }
+/* Überschriften in Sentient (kreativ), alles Funktionale bleibt in Plus Jakarta Sans */
+.h2, .h3, .prose h2, .prose h3, .step h3, .cards h3, .card h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: -.02em; }
 .h2, .prose h2 { font-weight: 300; }
 .h2 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); line-height: 1.1; }
 .h2--sm { font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.22; }

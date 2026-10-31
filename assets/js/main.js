@@ -52,7 +52,16 @@ menuBtn.addEventListener('click', () => {
 // Untermenüs: mit Maus beim Überfahren öffnen (kurze Schließverzögerung), sonst per Klick/Tippen; Klick daneben oder Escape schließt
 const toggles = document.querySelectorAll('.nav__toggle');
 const closeDropdowns = () => toggles.forEach(t => { t.parentElement.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); });
-const openDropdown = t => { closeDropdowns(); t.parentElement.classList.add('is-open'); t.setAttribute('aria-expanded', 'true'); };
+const navList = document.querySelector('.nav__list');
+const openDropdown = t => {
+  // Wechsel von einem offenen Panel zum anderen: ohne Ein-/Ausblenden, nur der Inhalt tauscht
+  const switching = [...toggles].some(o => o !== t && o.parentElement.classList.contains('is-open'));
+  if (switching) navList.classList.add('is-switching');
+  closeDropdowns();
+  t.parentElement.classList.add('is-open');
+  t.setAttribute('aria-expanded', 'true');
+  if (switching) requestAnimationFrame(() => requestAnimationFrame(() => navList.classList.remove('is-switching')));
+};
 const hoverNav = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 992px)');
 toggles.forEach(t => {
   const item = t.parentElement;

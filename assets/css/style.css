@@ -241,6 +241,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   transition: opacity .25s, transform .25s var(--ease), visibility .25s;
 }
 .nav__item.is-open .dropdown { opacity: 1; visibility: visible; transform: none; }
+.nav__list.is-switching .dropdown { transition: none; }
 /* unsichtbare Brücke über die Lücke zwischen Menüpunkt und Panel, damit das Panel beim Rüberfahren offen bleibt */
 @media (min-width: 992px) { .dropdown::before { content: ""; position: absolute; left: 0; right: 0; top: -20px; height: 20px; } }
 .dropdown__grid { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 264px)); gap: 8px; width: max-content; max-width: calc(100vw - 2rem); }

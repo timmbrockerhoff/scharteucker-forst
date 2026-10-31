@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-10-31T14:41:39.149Z",
+        "reason": "Nutzer wollte die Vorbildseite ksmforestandland.com möglichst genau nachbauen; die verwendet Plus Jakarta Sans"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "*.html"
+        ],
+        "createdAt": "2026-10-31T14:41:39.172Z",
+        "reason": "Fehlalarm: Innenabstand kommt aus .section/.container/.tile__body/.cta__body/.footer__bottom in style.css, die der statische Scan nicht auflöst"
+      }
+    ]
+  }
+}

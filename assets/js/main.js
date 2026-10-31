@@ -3,7 +3,7 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
-// Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen nur die Mittel-Box zeigen
+// Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
 let lastY = scrollY, ticking = false;
 const updateHeader = () => {
   const under = document.elementsFromPoint(innerWidth / 2, header.offsetHeight / 2)
@@ -11,7 +11,9 @@ const updateHeader = () => {
   header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey'));
   const y = scrollY;
   if (Math.abs(y - lastY) > 6) {
-    header.classList.toggle('is-compact', y > lastY && y > 150 && !header.classList.contains('is-open'));
+    const hide = y > lastY && y > 80 && !header.classList.contains('is-open');
+    if (hide && !header.classList.contains('is-hidden')) closeDropdowns();
+    header.classList.toggle('is-hidden', hide);
     lastY = y;
   }
   ticking = false;

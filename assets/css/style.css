@@ -363,11 +363,12 @@ h1, h2, h3, h4 { font-weight: 700; }
 .tile__more hr { border: 0; border-top: 1px solid rgba(250, 250, 250, .3); margin: .9rem 0 .8rem; }
 .tile__more p { font-size: 1rem; line-height: 1.5; }
 .tile__cta { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 1.25rem; }
-.tile__cta::after { content: "→"; font-size: 1.25rem; line-height: 1; transition: transform .35s var(--ease); }
+/* Winkel zeigt nach oben (Leiste klappt auf) und dreht sich beim Aufklappen nach unten */
+.tile__cta::after { content: ""; flex: none; width: 9px; height: 9px; margin: 4px 4px 0 0; border-left: 2px solid; border-top: 2px solid; transform: rotate(45deg); transition: transform .35s var(--ease); }
 .tile:hover img, .tile:focus-visible img { transform: scale(1.05); }
 .tile:hover::after, .tile:focus-visible::after { background-color: rgba(0, 0, 0, .25); }
 .tile:hover .tile__more, .tile:focus-visible .tile__more { grid-template-rows: 1fr; }
-.tile:hover .tile__cta::after, .tile:focus-visible .tile__cta::after { transform: translateX(4px); }
+.tile:hover .tile__cta::after, .tile:focus-visible .tile__cta::after { transform: translateY(-4px) rotate(225deg); }
 .tiles--4 { grid-template-columns: repeat(4, 1fr); }
 .tiles--4 .tile { min-height: 400px; }
 
@@ -612,6 +613,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   .tiles { grid-template-columns: repeat(2, 1fr); }
   .tile { min-height: 380px; }
   .tile__more { grid-template-rows: 1fr; }
+  .tile__cta::after { transform: translateY(-4px) rotate(225deg); }
   .facts { grid-template-columns: repeat(3, 1fr); }
   .stagger figure:last-child { margin-top: 4rem; }
   .slider { gap: 2.5rem; }

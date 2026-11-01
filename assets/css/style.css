@@ -323,30 +323,8 @@ h1, h2, h3, h4 { font-weight: 700; }
 .reveal-text .w.on { opacity: 1; }
 .about__link { margin-top: 2.5rem; }
 
-/* Über uns – TEMPORÄR fünf Varianten der Überschrift (Umschalter .variant-switch in main.js). Nach der Wahl die übrigen löschen. */
-.about .tagline { display: flex; align-items: center; width: fit-content; margin-bottom: 1.5rem; }
-/* A – Rahmen: Pille mit feiner Linie */
-.about--a .tagline { padding: 9px 16px; border: 1px solid rgba(250, 250, 250, .3); border-radius: 100px; font: 600 .78rem/1 var(--font-body); letter-spacing: .12em; color: var(--light); }
-/* B – Linie: kurzer Strich davor */
-.about--b .tagline { gap: 14px; font: 600 .8rem/1 var(--font-body); letter-spacing: .16em; color: var(--light); }
-.about--b .tagline::before { content: ""; width: 40px; height: 1.5px; background: var(--sage); }
-/* C – Groß: echte Überschrift in der Display-Schrift */
-.about--c .tagline { font-size: clamp(2.6rem, 5vw, 4.2rem); line-height: 1; color: var(--white); }
-/* D – Punkt: normale Schreibweise mit Salbei-Punkt */
-.about--d .tagline { gap: 10px; font: 500 1rem/1 var(--font-body); text-transform: none; letter-spacing: 0; color: rgba(250, 250, 250, .75); }
-.about--d .tagline::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); }
-/* E – Fläche: gefüllte Salbei-Pille */
-.about--e .tagline { padding: 9px 16px; border-radius: 100px; background: var(--sage); font: 700 .78rem/1 var(--font-body); letter-spacing: .12em; color: var(--green-900); }
-
-.variant-switch {
-  position: fixed; left: 16px; bottom: 16px; z-index: 41; max-width: calc(100% - 180px);
-  display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px; border-radius: 12px;
-  background: rgba(0, 25, 6, .85); color: var(--white); font: 600 .75rem/1 var(--font-body);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-}
-.variant-switch span { padding: 0 6px; opacity: .7; }
-.variant-switch button { padding: 7px 10px; border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; cursor: pointer; }
-.variant-switch button[aria-pressed="true"] { background: var(--white); color: var(--green-900); }
+/* Über uns: Überschrift als kleine Pille mit feiner heller Umrandung */
+.about .tagline { width: fit-content; margin-bottom: 1.5rem; padding: 9px 16px; border: 1px solid rgba(250, 250, 250, .3); border-radius: 100px; font: 600 .78rem/1 var(--font-body); letter-spacing: .12em; color: var(--light); }
 
 /* ---------- Kachel-Raster (Produkte / Waldkreislauf) ---------- */
 .deco-tree::before {

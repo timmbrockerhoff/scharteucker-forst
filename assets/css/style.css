@@ -385,6 +385,7 @@ h1, h2, h3, h4 { font-weight: 700; }
 /* ---------- Zahlen & Fakten ---------- */
 .split-head { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 5rem; }
 .split-head p + p { margin-top: 1.5rem; }
+.split-head > :only-child { grid-column: 1 / -1; } /* ohne rechte Spalte volle Breite */
 .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; list-style: none; }
 .fact {
   background: var(--grey); border-radius: 12px;

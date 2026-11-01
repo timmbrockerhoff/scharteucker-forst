@@ -323,35 +323,20 @@ h1, h2, h3, h4 { font-weight: 700; }
 .reveal-text .w.on { opacity: 1; }
 .about__link { margin-top: 2.5rem; }
 
-/* Über uns – TEMPORÄR fünf Varianten (Umschalter .variant-switch in main.js). Nach der Wahl die übrigen löschen. */
-.about__img, .about__facts { display: none; }
-/* B – Bild und Text */
-.about--b .about__inner { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; }
-.about--b .about__img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }
-.about--b .reveal-text { font-size: clamp(1.3rem, 1.8vw, 1.75rem); }
-/* C – Text mit drei Zahlen */
-.about--c .about__facts {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 2rem;
-  max-width: 62rem; margin: 3rem 0 0; padding: 2rem 0 0; list-style: none; border-top: 1px solid rgba(0, 25, 6, .15);
-}
-.about__facts b { display: block; font: 600 clamp(2.6rem, 5vw, 4rem)/1 var(--font-display); color: var(--green-600); }
-.about__facts span { display: block; margin-top: .5rem; font-size: .95rem; }
-/* D – Salbei, mittig, Display-Schrift */
-.about--d { background: var(--sage); color: var(--green-900); text-align: center; }
-.about--d .tagline { color: var(--green-900); opacity: .7; }
-.about--d .reveal-text { max-width: 56rem; margin-inline: auto; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.1; letter-spacing: .01em; }
-/* E – Vollbild-Foto */
-.about--e {
-  padding-block: calc(var(--section-y) * 1.4); color: var(--white); text-align: center;
-  background: linear-gradient(rgba(0, 25, 6, .55), rgba(0, 25, 6, .75)), url(../img/waldpflege-eiche.jpg) center / cover;
-}
-.about--e .reveal-text { margin-inline: auto; }
-/* D und E: Link als runder Button */
-.about--d .about__link, .about--e .about__link { padding: 12px 24px; border-radius: 100px; background: var(--green-900); color: var(--light); transition: background-color .25s; }
-.about--d .about__link:hover { background: var(--green-600); }
-.about--e .about__link { background: var(--light); color: var(--green-900); }
-.about--e .about__link:hover { background: var(--white); }
-@media (max-width: 767px) { .about--b .about__inner { grid-template-columns: 1fr; } }
+/* Über uns – TEMPORÄR fünf Varianten der Überschrift (Umschalter .variant-switch in main.js). Nach der Wahl die übrigen löschen. */
+.about .tagline { display: flex; align-items: center; width: fit-content; margin-bottom: 1.5rem; }
+/* A – Rahmen: Pille mit feiner Linie */
+.about--a .tagline { padding: 9px 16px; border: 1px solid rgba(250, 250, 250, .3); border-radius: 100px; font: 600 .78rem/1 var(--font-body); letter-spacing: .12em; color: var(--light); }
+/* B – Linie: kurzer Strich davor */
+.about--b .tagline { gap: 14px; font: 600 .8rem/1 var(--font-body); letter-spacing: .16em; color: var(--light); }
+.about--b .tagline::before { content: ""; width: 40px; height: 1.5px; background: var(--sage); }
+/* C – Groß: echte Überschrift in der Display-Schrift */
+.about--c .tagline { font-size: clamp(2.6rem, 5vw, 4.2rem); line-height: 1; color: var(--white); }
+/* D – Punkt: normale Schreibweise mit Salbei-Punkt */
+.about--d .tagline { gap: 10px; font: 500 1rem/1 var(--font-body); text-transform: none; letter-spacing: 0; color: rgba(250, 250, 250, .75); }
+.about--d .tagline::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--sage); }
+/* E – Fläche: gefüllte Salbei-Pille */
+.about--e .tagline { padding: 9px 16px; border-radius: 100px; background: var(--sage); font: 700 .78rem/1 var(--font-body); letter-spacing: .12em; color: var(--green-900); }
 
 .variant-switch {
   position: fixed; left: 16px; bottom: 16px; z-index: 41; max-width: calc(100% - 180px);

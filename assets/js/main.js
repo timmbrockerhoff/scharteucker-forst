@@ -124,17 +124,15 @@ if (reveal) {
   addEventListener('scroll', update, { passive: true });
 }
 
-// TEMPORÄR: Umschalter für die fünf Über-uns-Varianten. Nach der Wahl samt CSS-Blöcken .about--* und .variant-switch entfernen.
+// TEMPORÄR: Umschalter für die fünf Varianten der Über-uns-Überschrift. Nach der Wahl samt CSS-Blöcken .about--* und .variant-switch entfernen.
 const about = document.querySelector('.about');
 if (about) {
-  const variants = { a: ['A Hell', 'section--light'], b: ['B Bild', 'section--light'], c: ['C Zahlen', 'section--grey'], d: ['D Salbei', 'section--light'], e: ['E Foto', 'section--dark'] };
+  const variants = { a: 'A Rahmen', b: 'B Linie', c: 'C Groß', d: 'D Punkt', e: 'E Fläche' };
   const bar = document.createElement('div');
   bar.className = 'variant-switch';
-  bar.innerHTML = '<span>Über uns</span>' + Object.entries(variants).map(([k, [l]]) => `<button type="button" data-v="${k}">${l}</button>`).join('');
+  bar.innerHTML = '<span>Über uns</span>' + Object.entries(variants).map(([k, l]) => `<button type="button" data-v="${k}">${l}</button>`).join('');
   const setVariant = v => {
-    about.classList.remove('section--light', 'section--grey', 'section--dark');
     Object.keys(variants).forEach(k => about.classList.toggle('about--' + k, k === v));
-    about.classList.add(variants[v][1]);
     bar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
     try { localStorage.setItem('aboutVariant', v); } catch {}
   };

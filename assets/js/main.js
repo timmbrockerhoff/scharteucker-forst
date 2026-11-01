@@ -11,7 +11,7 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let footerVisible = false, fabShown = false, hiddenBy = 'top', stopDrip = null;
 const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
 
-const drip = (dur = 1100) => {
+const drip = (dur = 1300) => {
   const src = document.querySelector(matchMedia('(max-width: 991px)').matches ? '.menu-btn' : '.header .nav__cta');
   const a = src.getBoundingClientRect(), b = fabBtn.getBoundingClientRect();
   if (!a.width || !b.width) return;
@@ -20,7 +20,7 @@ const drip = (dur = 1100) => {
   const ax = a.left + a.width / 2, ay = a.top + a.height / 2;
   const bx = b.left + b.width / 2, by = b.top + b.height / 2;
   // Kein freier Tropfen: oben wölbt sich der Button kurz aus und zieht sich zurück, unten wächst er mit einer einsinkenden Ausbuchtung
-  const R = 26, tipY = a.bottom + 18, budY = by - b.height / 2 - 14;
+  const R = 30, tipY = a.bottom + 48, budY = by - b.height / 2 - 38;
   const layer = document.createElement('div'); layer.className = 'goo-layer'; document.body.appendChild(layer);
   const blob = r => { const d = document.createElement('div'); d.style.borderRadius = r; layer.appendChild(d); return d; };
   const place = (el, x, y, w, h) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px)`; };
@@ -37,7 +37,7 @@ const drip = (dur = 1100) => {
       place(drop, ax, y, size, size);
       place(rest, ax, ay, a.width * f + .0001, a.height * f + .0001);
       place(pool, bx, by, 0, 0);
-      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), r = (4 + 3 * (1 - s)) * f; place(el, ax, lerp(a.bottom - 2, y, s), r * 2, r * 2); });
+      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), r = (5 + 4 * (1 - s)) * f; place(el, ax, lerp(a.bottom - 2, y, s), r * 2, r * 2); });
     } else {
       const u = (t - H) / (1 - H), gw = easeOut(clamp(u / .7)), wob = 1 + .05 * Math.sin(clamp((u - .8) / .2) * Math.PI);
       const k = easeOut(clamp(u / .3)) * (1 - easeIn(clamp((u - .45) / .55)));
@@ -45,7 +45,7 @@ const drip = (dur = 1100) => {
       place(rest, ax, ay, 0, 0);
       place(drop, bx, y, size, size);
       place(pool, bx, by, b.width * gw * wob + .0001, b.height * gw / wob + .0001);
-      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), r = 8 * k; place(el, bx, lerp(y, by, s), r * 2, r * 2); });
+      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), r = (5 + 4 * s) * k; place(el, bx, lerp(y, by, s), r * 2, r * 2); });
     }
     if (t < 1) raf = requestAnimationFrame(frame);
     else { fab.classList.remove('is-dripping'); layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160 }).onfinish = end; }

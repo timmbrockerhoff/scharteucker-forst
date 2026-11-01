@@ -126,6 +126,29 @@ if (reveal) {
   addEventListener('scroll', update, { passive: true });
 }
 
+// Kennzahlen zählen beim Erscheinen von 0 hoch. Der Endwert steht im HTML, ohne JS bleibt alles korrekt.
+const countUp = el => {
+  const text = el.textContent, m = text.match(/\d[\d.,]*/);
+  if (!m) return;
+  const dec = (m[0].split(',')[1] || '').length;
+  const target = parseFloat(m[0].replace(/\./g, '').replace(',', '.'));
+  const pre = text.slice(0, m.index), post = text.slice(m.index + m[0].length);
+  const fmt = v => v.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  const t0 = performance.now(), dur = 1800;
+  const step = t => {
+    const p = Math.min(1, (t - t0) / dur);
+    el.textContent = pre + fmt(target * (1 - (1 - p) ** 3)) + post; // schnell los, sanft auslaufen
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+};
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const countIo = new IntersectionObserver(entries => {
+    for (const e of entries) if (e.isIntersecting) { e.target.querySelectorAll('.fact b').forEach(countUp); countIo.unobserve(e.target); }
+  }, { threshold: .4 });
+  document.querySelectorAll('.facts').forEach(el => countIo.observe(el));
+}
+
 // Karten-Slider
 document.querySelectorAll('[data-slider]').forEach(slider => {
   const track = slider.querySelector('.slider__track');

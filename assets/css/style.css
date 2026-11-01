@@ -512,15 +512,15 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .fab__btn {
   display: flex; align-items: center; gap: 10px;
   height: 56px; padding: 0 22px 0 18px; border: 0; border-radius: 100px;
-  background: var(--green-600); color: var(--white); font: 600 1rem/1 var(--font-body);
+  background: var(--white); color: var(--green-900); font: 600 1rem/1 var(--font-body);
   box-shadow: 0 8px 24px rgba(0, 0, 0, .25); cursor: pointer;
   transform: scale(.3); transition: background-color .25s, transform .2s ease-in;
 }
 /* Aufploppen mit leichtem Überschwingen, kurz verzögert, damit die Navigation zuerst verschwindet */
 .fab.is-visible .fab__btn { transform: none; transition: background-color .25s, transform .45s cubic-bezier(.34, 1.56, .64, 1) .15s; }
 @media (prefers-reduced-motion: reduce) { .fab__btn, .fab.is-visible .fab__btn { transform: none; } }
-.fab__btn:hover { background: #0a6a33; }
-.fab__btn svg { width: 22px; height: 22px; flex: none; }
+.fab__btn:hover { background: #efefee; }
+.fab__btn svg { width: 22px; height: 22px; flex: none; color: var(--green-600); }
 .fab__menu {
   position: relative;
   display: flex; flex-direction: column; align-items: flex-end; gap: 8px;

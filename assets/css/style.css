@@ -533,11 +533,11 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .fab__menu a {
   display: flex; align-items: center; gap: 10px; white-space: nowrap;
   padding: 11px 18px; border-radius: 100px;
-  background: var(--white); color: var(--green-900); text-decoration: none; font: 600 .95rem/1 var(--font-body);
+  background: var(--green-600); color: var(--white); text-decoration: none; font: 600 .95rem/1 var(--font-body);
   box-shadow: 0 6px 20px rgba(0, 0, 0, .18); transition: background-color .2s;
 }
-.fab__menu a:hover { background: #efefee; }
-.fab__menu svg { width: 18px; height: 18px; flex: none; color: var(--green-600); }
+.fab__menu a:hover { background: #0a6a33; }
+.fab__menu svg { width: 18px; height: 18px; flex: none; }
 @media (max-width: 767px) {
   .fab { right: 16px; bottom: 16px; }
   .fab__btn { height: 52px; }

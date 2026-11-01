@@ -343,7 +343,7 @@ h1, h2, h3, h4 { font-weight: 700; }
 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 /* Kachel: Titel oben links, unten eine Milchglas-Leiste wie die Navigation; beim Hovern wächst sie mit der Beschreibung nach oben */
 .tile {
-  position: relative; display: flex; align-items: flex-end; isolation: isolate;
+  position: relative; display: flex; flex-direction: column; justify-content: space-between; isolation: isolate;
   min-height: 480px; padding: 12px; overflow: hidden; border-radius: 16px;
   color: var(--white); text-decoration: none; background: var(--green-900);
 }
@@ -353,7 +353,7 @@ h1, h2, h3, h4 { font-weight: 700; }
   background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, .25) 100%);
   transition: background-color .4s;
 }
-.tile h3 { position: absolute; top: 1.75rem; left: 1.75rem; right: 1.75rem; }
+.tile h3 { padding: 1rem 1rem 0; }
 .tile__body {
   width: 100%; padding: 1rem 1.25rem; border-radius: 12px;
   background: rgba(255, 255, 255, .14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18);
@@ -624,7 +624,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   :root { --section-y: 64px; }
   .tiles, .tiles--4 { grid-template-columns: 1fr; }
   .tile { min-height: 320px; }
-  .tile h3 { top: 1.5rem; left: 1.5rem; right: 1.5rem; }
+  .tile h3 { padding: .75rem .75rem 0; }
   .facts { grid-template-columns: repeat(2, 1fr); }
   .fact { min-height: 140px; }
   .stagger { grid-template-columns: 1fr; margin-top: 3.5rem; gap: 1.5rem; }

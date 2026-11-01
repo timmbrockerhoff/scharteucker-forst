@@ -114,11 +114,13 @@ const reveal = document.querySelector('.reveal-text');
 if (reveal) {
   reveal.innerHTML = reveal.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
   const words = reveal.querySelectorAll('.w');
+  const link = reveal.parentElement.querySelector('.about__link'); // hellt als letztes „Wort“ mit auf
   const update = () => {
     const r = reveal.getBoundingClientRect();
     const p = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .35)));
-    const n = Math.round(p * words.length);
+    const n = Math.round(p * (words.length + 1));
     words.forEach((w, i) => w.classList.toggle('on', i < n));
+    link?.classList.toggle('on', n > words.length);
   };
   update();
   addEventListener('scroll', update, { passive: true });

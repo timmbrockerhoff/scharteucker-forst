@@ -505,7 +505,7 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 /* ---------- Schnellkontakt: ein Kontakt-Button unten rechts mit Auswahlmenü ---------- */
 .fab {
   position: fixed; right: 24px; bottom: 24px; z-index: 40;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
   opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
 }
 .fab.is-visible { opacity: 1; visibility: visible; }

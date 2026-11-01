@@ -22,7 +22,8 @@ let lastY = scrollY, ticking = false;
 const updateHeader = () => {
   const under = document.elementsFromPoint(innerWidth / 2, header.offsetHeight / 2)
     .find(el => !header.contains(el));
-  header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey'));
+  // dunkle Schrift nur über heller Fläche, nicht über Fotos/Kacheln in hellen Sektionen
+  header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey') && !under.closest('.tile, figure, img, video'));
   const y = scrollY;
   header.classList.toggle('is-compact', y > 80); // außerhalb des Seitenanfangs nur die mittlere Navigation zeigen
   if (Math.abs(y - lastY) > 6) {

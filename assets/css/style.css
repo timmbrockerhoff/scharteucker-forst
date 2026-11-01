@@ -148,10 +148,13 @@ h1, h2, h3, h4 { font-weight: 700; }
 .btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .link-arrow {
   display: inline-flex; align-items: center; gap: .5rem;
-  font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 4px 0;
+  font-weight: 600; text-decoration: none; padding: 4px 0;
 }
-.link-arrow::after { content: "›"; font-size: 1.2em; line-height: 1; transition: transform .25s var(--ease); }
-.link-arrow:hover::after { transform: translateX(4px); }
+/* Unterstrich zieht sich beim Hovern von links unter dem Text auf, der Pfeil rückt vor */
+.link-arrow span { padding-bottom: 3px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size .35s var(--ease); }
+.link-arrow:is(:hover, :focus-visible) span { background-size: 100% 1.5px; }
+.link-arrow::after { content: "›"; font-size: 1.2em; line-height: 1; transition: transform .35s var(--ease); }
+.link-arrow:is(:hover, :focus-visible)::after { transform: translateX(6px); }
 
 /* ---------- Logo ---------- */
 /* Bildmarke als eingefärbte Maske (folgt der Textfarbe), Schriftzug als Text in Plus Jakarta Sans.

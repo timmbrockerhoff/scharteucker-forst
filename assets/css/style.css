@@ -210,6 +210,11 @@ h1, h2, h3, h4 { font-weight: 700; }
 .header__inner { transition: opacity .65s ease-out; }
 .header.is-hidden .header__inner { opacity: 0; transition-duration: .35s; transition-timing-function: ease-out; }
 .header.is-hidden .header__inner > * { pointer-events: none; }
+/* Beim Hochscrollen (nicht ganz oben) nur die mittlere Navigation: Logo, Telefon und Kontakt ausgeblendet */
+@media (min-width: 992px) {
+  .header .logo, .nav__aside { transition: opacity .35s ease-out, color .3s; }
+  .header.is-compact .logo, .header.is-compact .nav__aside { opacity: 0; pointer-events: none; }
+}
 
 .nav { grid-column: 2 / 4; display: grid; grid-template-columns: subgrid; align-items: center; }
 .nav__list {

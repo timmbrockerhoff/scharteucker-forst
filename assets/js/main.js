@@ -24,6 +24,7 @@ const updateHeader = () => {
     .find(el => !header.contains(el));
   header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey'));
   const y = scrollY;
+  header.classList.toggle('is-compact', y > 80); // außerhalb des Seitenanfangs nur die mittlere Navigation zeigen
   if (Math.abs(y - lastY) > 6) {
     const hide = y > lastY && y > 80 && !header.classList.contains('is-open');
     if (hide && !header.classList.contains('is-hidden')) closeDropdowns();

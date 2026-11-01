@@ -124,6 +124,30 @@ if (reveal) {
   addEventListener('scroll', update, { passive: true });
 }
 
+// TEMPORÄR: Umschalter für die fünf Über-uns-Varianten. Nach der Wahl samt CSS-Blöcken .about--* und .variant-switch entfernen.
+const about = document.querySelector('.about');
+if (about) {
+  const variants = { a: ['A Hell', 'section--light'], b: ['B Bild', 'section--light'], c: ['C Zahlen', 'section--grey'], d: ['D Salbei', 'section--light'], e: ['E Foto', 'section--dark'] };
+  const bar = document.createElement('div');
+  bar.className = 'variant-switch';
+  bar.innerHTML = '<span>Über uns</span>' + Object.entries(variants).map(([k, [l]]) => `<button type="button" data-v="${k}">${l}</button>`).join('');
+  const setVariant = v => {
+    about.classList.remove('section--light', 'section--grey', 'section--dark');
+    Object.keys(variants).forEach(k => about.classList.toggle('about--' + k, k === v));
+    about.classList.add(variants[v][1]);
+    bar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+    try { localStorage.setItem('aboutVariant', v); } catch {}
+  };
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    setVariant(b.dataset.v);
+    about.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  document.body.append(bar);
+  let saved = null; try { saved = localStorage.getItem('aboutVariant'); } catch {}
+  setVariant(variants[saved] ? saved : 'a');
+}
+
 // Karten-Slider
 document.querySelectorAll('[data-slider]').forEach(slider => {
   const track = slider.querySelector('.slider__track');

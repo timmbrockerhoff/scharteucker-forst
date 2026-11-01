@@ -112,7 +112,8 @@ document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 // Wort für Wort aufhellen, gekoppelt an die Scrollposition
 const reveal = document.querySelector('.reveal-text');
 if (reveal) {
-  reveal.innerHTML = reveal.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
+  // Zeilenumbrüche (<br>) aus dem HTML bleiben erhalten
+  reveal.innerHTML = reveal.innerHTML.split(/<br\s*\/?>/).map(part => part.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ')).join(' <br>');
   const words = reveal.querySelectorAll('.w');
   const link = reveal.parentElement.querySelector('.about__link'); // hellt als letztes „Wort“ mit auf
   const update = () => {

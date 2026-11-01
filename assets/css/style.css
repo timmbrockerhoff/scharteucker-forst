@@ -392,30 +392,17 @@ h1, h2, h3, h4 { font-weight: 700; }
 .split-head:has(> :only-child) { margin-bottom: 3rem; }
 .split-head > :only-child { grid-column: 1 / -1; }
 .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; list-style: none; }
-/* Kennzahl-Kästen im Look der Kachel-Leisten: stark verschwommenes Foto dahinter, darüber helles Milchglas mit feiner Kante */
 .fact {
-  position: relative; isolation: isolate; overflow: hidden;
-  background: var(--green-800); border-radius: 12px; color: var(--white);
+  background: var(--grey); border-radius: 12px;
   min-height: 176px; padding: 1.5rem;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .4rem;
 }
-.fact::before, .fact::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; }
-.fact::before { inset: -40px; background: var(--fact-img) center / cover; filter: blur(28px) brightness(.6) saturate(1.1); }
-.fact::after { background: rgba(255, 255, 255, .14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18); }
-.fact:nth-child(1) { --fact-img: url(../img/langholz.jpg?v=2); }
-.fact:nth-child(2) { --fact-img: url(../img/industrieholz-polter.jpg); }
-.fact:nth-child(3) { --fact-img: url(../img/nv-8-jahre.jpg); }
-.fact:nth-child(4) { --fact-img: url(../img/pfaehle-zaun.jpg); }
-.fact:nth-child(5) { --fact-img: url(../img/holzernte-langholz.jpg); }
-.fact:nth-child(6) { --fact-img: url(../img/schnittholz-stapel.jpg); }
-.fact:nth-child(7) { --fact-img: url(../img/brennholz-scheite.jpg); }
-.fact:nth-child(8) { --fact-img: url(../img/gps-holz-markiert.jpg); }
 .fact b {
   font-family: var(--font-display); font-weight: 600;
-  font-size: clamp(2.1rem, 3.2vw, 2.9rem); line-height: 1.1;
+  font-size: clamp(2.1rem, 3.2vw, 2.9rem); line-height: 1.1; color: var(--green-600);
   font-variant-numeric: tabular-nums; /* gleich breite Ziffern, damit beim Hochzählen nichts wackelt */
 }
-.fact span { font-size: .95rem; line-height: 1.35; opacity: .85; }
+.fact span { font-size: .95rem; line-height: 1.35; }
 
 /* ---------- Nachhaltigkeit (versetzte Bilder) ---------- */
 .feature-head { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }

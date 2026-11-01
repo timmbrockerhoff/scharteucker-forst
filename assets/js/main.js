@@ -4,14 +4,14 @@ const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
 // Schnellkontakt: ein Kontakt-Button unten rechts. Erscheint unterhalb des Seitenkopfs mit Abtropf-Effekt
-// (der Kontakt-Button oben zieht sich wie Flüssigkeit lang und tropft nach unten rechts), über dem Footer ausgeblendet.
+// (oben löst sich ein Tropfen vom Kontakt-Button und vergeht, unten rechts fällt er wieder ins Ziel), über dem Footer ausgeblendet.
 const fab = document.querySelector('.fab');
 const fabBtn = fab && fab.querySelector('.fab__btn');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let footerVisible = false, fabShown = false, hiddenBy = 'top', stopDrip = null;
 const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
 
-const drip = (dur = 1600) => {
+const drip = (dur = 1300) => {
   const src = document.querySelector(matchMedia('(max-width: 991px)').matches ? '.menu-btn' : '.header .nav__cta');
   const a = src.getBoundingClientRect(), b = fabBtn.getBoundingClientRect();
   if (!a.width || !b.width) return;
@@ -19,10 +19,8 @@ const drip = (dur = 1600) => {
   const inOut = t => -(Math.cos(Math.PI * t) - 1) / 2, easeIn = t => t * t, easeOut = t => 1 - Math.pow(1 - t, 3);
   const ax = a.left + a.width / 2, ay = a.top + a.height / 2;
   const bx = b.left + b.width / 2, by = b.top + b.height / 2;
-  // Wegpunkte: Ablösen unter dem Button oben, weicher Bogen, Ankunft knapp über dem Ziel
+  // Wegpunkte: Ablösen unter dem Button oben, Ankunft knapp über dem Ziel (kein Weg dazwischen)
   const p0 = { x: ax, y: a.bottom - 4 }, p1 = { x: ax, y: a.bottom + 56 }, p2 = { x: bx, y: by - 46 };
-  const ctrl = { x: lerp(p1.x, p2.x, .85), y: lerp(p1.y, p2.y, .25) };
-  const bez = u => ({ x: (1 - u) ** 2 * p1.x + 2 * (1 - u) * u * ctrl.x + u * u * p2.x, y: (1 - u) ** 2 * p1.y + 2 * (1 - u) * u * ctrl.y + u * u * p2.y });
   const layer = document.createElement('div'); layer.className = 'goo-layer'; document.body.appendChild(layer);
   const blob = r => { const d = document.createElement('div'); d.style.borderRadius = r; layer.appendChild(d); return d; };
   const place = (el, x, y, w, h, rot = 0) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px) rotate(${rot}rad)`; };
@@ -30,14 +28,16 @@ const drip = (dur = 1600) => {
   fab.classList.add('is-dripping');
   let raf, prev = null; const t0 = performance.now();
   const end = () => { cancelAnimationFrame(raf); layer.remove(); fab.classList.remove('is-dripping'); stopDrip = null; };
-  const P1 = .3, P2 = .74;
+  const P1 = .36, H = .5, P2 = .66; // Ablösen bis P1, oben vergehen bis H, unten entstehen bis P2, dann Ankunft
   const frame = now => {
     const t = clamp((now - t0) / dur);
     let pos, size;
     if (t < P1) { const u = inOut(t / P1); pos = { x: ax, y: lerp(p0.y, p1.y, u) }; size = lerp(18, 40, u); }
-    else if (t < P2) { pos = bez(inOut((t - P1) / (P2 - P1))); size = 40; }
+    else if (t < H) { const u = (t - P1) / (H - P1); pos = { x: ax, y: p1.y + 24 * easeOut(u) }; size = 40 * (1 - easeIn(u)); }
+    else if (t < P2) { const u = easeOut((t - H) / (P2 - H)); pos = { x: bx, y: lerp(p2.y - 24, p2.y, u) }; size = 40 * u; }
     else { const u = easeIn((t - P2) / (1 - P2)); pos = { x: bx, y: lerp(p2.y, by, u) }; size = lerp(40, 26, u); }
     // leichte Streckung in Bewegungsrichtung, abhängig von der Geschwindigkeit
+    const jump = prev && Math.hypot(pos.x - prev.x, pos.y - prev.y) > 80; if (jump) prev = null; // Sprung von oben nach unten
     const v = prev ? Math.hypot(pos.x - prev.x, pos.y - prev.y) : 0, rot = prev ? Math.atan2(pos.y - prev.y, pos.x - prev.x) - Math.PI / 2 : 0;
     const st = 1 + Math.min(.16, v * .012); prev = pos;
     place(drop, pos.x, pos.y, size / st, size * st, rot);

@@ -3,18 +3,19 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
-// Schnellkontakt: ein Kontakt-Button unten rechts. Führt zur Kontaktseite, ploppt auf, sobald die Navigation beim Runterscrollen verschwindet; über dem Footer ausgeblendet.
-const fab = document.querySelector('.fab');
+// Schnellkontakt unten rechts (zur Kontaktseite) und Nach-oben-Button unten links. Ploppen auf, sobald die Navigation beim Runterscrollen verschwindet; über dem Footer ausgeblendet.
+const fabs = document.querySelectorAll('.fab');
 let footerVisible = false, fabShown = false;
 
 const updateFab = () => {
-  if (!fab) return;
+  if (!fabs.length) return;
   const show = scrollY > 80 && !footerVisible; // gleiche Schwelle wie das Ausblenden der Navigation
   if (show === fabShown) return;
   fabShown = show;
-  fab.classList.toggle('is-visible', show);
+  fabs.forEach(f => f.classList.toggle('is-visible', show));
 };
-if (fab) new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
+if (fabs.length) new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
+document.querySelector('.fab--left .fab__btn')?.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
 
 // Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
 let lastY = scrollY, ticking = false;

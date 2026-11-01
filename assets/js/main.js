@@ -56,7 +56,7 @@ const drip = (dur = 1300) => {
 
 const updateFab = () => {
   if (!fab) return;
-  const show = scrollY > innerHeight * .6 && !footerVisible;
+  const show = scrollY > 80 && !footerVisible; // gleiche Schwelle wie das Ausblenden der Navigation: Abtropfen startet, solange der Button oben noch sichtbar ist
   if (show === fabShown) return;
   fabShown = show;
   fab.classList.toggle('is-visible', show);

@@ -410,8 +410,8 @@ h1, h2, h3, h4 { font-weight: 700; }
 .split-head > :only-child { grid-column: 1 / -1; }
 .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; list-style: none; }
 .fact {
-  /* dasselbe Glas wie Navigation/Untermenü (--nav-pill + blur 30px) */
-  background: rgba(158, 158, 158, .22); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); border-radius: 12px;
+  /* kein Hintergrund, nur feiner Rahmen in der Schriftfarbe */
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: 12px;
   min-height: 176px; padding: 1.5rem;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .4rem;
 }

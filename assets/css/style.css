@@ -100,6 +100,14 @@ h1, h2, h3, h4 { font-weight: 700; }
 }
 .section--light .tagline, .section--grey .tagline { color: var(--green-600); }
 .cta .tagline { color: var(--sage); }
+/* Tagline als kleine Pille mit feiner Umrandung in der Schriftfarbe (hell auf Dunkel, dunkel auf Hell) */
+.tagline--pill {
+  width: fit-content; margin-bottom: 1.5rem; padding: 9px 16px; border-radius: 100px;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  font: 600 .78rem/1 var(--font-body); letter-spacing: .12em;
+}
+.section--dark .tagline--pill, .section--darkest .tagline--pill { color: var(--light); }
+.section--light .tagline--pill, .section--grey .tagline--pill { color: var(--green-900); }
 /* Abschnitts- und Kartenüberschriften wie bei KSM in Plus Jakarta Sans fett */
 .h2 { font-size: clamp(2rem, 3.2vw, 3rem); line-height: 1.14; letter-spacing: -.01em; }
 .h2--sm { font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.22; }
@@ -326,8 +334,6 @@ h1, h2, h3, h4 { font-weight: 700; }
 .about__link { margin-top: 2.5rem; opacity: .3; transition: opacity .3s; }
 .about__link:is(.on, :hover, :focus-visible) { opacity: 1; }
 
-/* Über uns: Überschrift als kleine Pille mit feiner heller Umrandung */
-.about .tagline { width: fit-content; margin-bottom: 1.5rem; padding: 9px 16px; border: 1px solid rgba(250, 250, 250, .3); border-radius: 100px; font: 600 .78rem/1 var(--font-body); letter-spacing: .12em; color: var(--light); }
 
 /* ---------- Kachel-Raster (Produkte / Waldkreislauf) ---------- */
 .deco-tree::before {

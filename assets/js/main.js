@@ -18,20 +18,50 @@ if (fabs.length) new IntersectionObserver(([e]) => { footerVisible = e.isInterse
 document.querySelector('.fab--left .fab__btn')?.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
 
 // Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
-// Hell oder dunkel unter der Navigation? Fünf Messpunkte über die Breite der mittleren Leiste (mobil: über die ganze Kopfzeile),
-// jeder Punkt zählt als hell, wenn er auf heller Sektionsfläche liegt und nicht auf Foto, Kachel oder Video. Die Mehrheit entscheidet.
+// Hell oder dunkel unter der Navigation? Echte Helligkeit an fünf Punkten über die Breite der Leiste (mobil: ganze Kopfzeile).
+// Pro Punkt wird der Stapel unter dem Zeiger von oben nach unten durchsucht: Foto → Helligkeit der Bildpunkte an genau dieser Stelle,
+// Video (Hero, stark abgedunkelt) → dunkel, deckende Fläche → Helligkeit ihrer Hintergrundfarbe. Ist der Durchschnitt hell, wird die Schrift dunkel.
 const navList = document.querySelector('.nav__list');
+const lum = (r, g, b) => (.2126 * r + .7152 * g + .0722 * b) / 255;
+const GRID = 48, grids = new WeakMap();
+const gridOf = img => { // jedes Bild einmal auf 48 × 48 verkleinert auslesen und als Helligkeitsraster merken
+  if (grids.has(img)) return grids.get(img);
+  if (!img.complete || !img.naturalWidth) { img.addEventListener('load', () => updateHeader(), { once: true }); return null; }
+  const c = document.createElement('canvas'); c.width = c.height = GRID;
+  const ctx = c.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(img, 0, 0, GRID, GRID);
+  let g = null;
+  try { const d = ctx.getImageData(0, 0, GRID, GRID).data; g = new Float32Array(GRID * GRID).map((_, i) => lum(d[i * 4], d[i * 4 + 1], d[i * 4 + 2])); } catch {}
+  grids.set(img, g);
+  return g;
+};
+const imgLumAt = (img, x, y) => { // berücksichtigt object-fit: cover und object-position
+  const g = gridOf(img);
+  if (!g) return 0;
+  const r = img.getBoundingClientRect(), nw = img.naturalWidth, nh = img.naturalHeight;
+  const sc = Math.max(r.width / nw, r.height / nh), dw = nw * sc, dh = nh * sc;
+  const [px, py] = getComputedStyle(img).objectPosition.split(' ').map(v => v.endsWith('%') ? parseFloat(v) / 100 : .5);
+  const u = (x - r.left - (r.width - dw) * px) / dw, v = (y - r.top - (r.height - dh) * py) / dh;
+  const cl = n => Math.min(GRID - 1, Math.max(0, Math.floor(n * GRID)));
+  return g[cl(v) * GRID + cl(u)];
+};
+const pointLum = (x, y) => {
+  for (const el of document.elementsFromPoint(x, y)) {
+    if (header.contains(el)) continue;
+    if (el.tagName === 'IMG') return imgLumAt(el, x, y);
+    if (el.tagName === 'VIDEO') return .1;
+    const m = getComputedStyle(el).backgroundColor.match(/[\d.]+/g);
+    if (m && (m[3] === undefined || +m[3] > .3)) return lum(+m[0], +m[1], +m[2]);
+  }
+  return 1;
+};
 const underIsLight = () => {
   let r = navList?.getBoundingClientRect();
   if (!r || !r.width || getComputedStyle(navList.closest('.nav')).position === 'fixed') r = header.getBoundingClientRect();
   const y = header.offsetHeight / 2;
-  let light = 0;
-  for (let i = 0; i < 5; i++) {
-    const x = r.left + r.width * (.1 + i * .2);
-    const el = document.elementsFromPoint(x, y).find(e => !header.contains(e));
-    if (el?.closest('.section--light, .section--grey') && !el.closest('.tile, figure, img, video, picture')) light++;
-  }
-  return light >= 3;
+  let sum = 0;
+  for (let i = 0; i < 5; i++) sum += pointLum(r.left + r.width * (.1 + i * .2), y);
+  return sum / 5 > .5;
 };
 let lastY = scrollY, ticking = false;
 const updateHeader = () => {

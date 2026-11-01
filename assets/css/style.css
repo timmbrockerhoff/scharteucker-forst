@@ -503,7 +503,6 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .contact-list a:hover { text-decoration: underline; }
 
 /* ---------- Schnellkontakt: ein Kontakt-Button unten rechts mit Auswahlmenü ---------- */
-.goo-defs { position: absolute; width: 0; height: 0; }
 .fab {
   position: fixed; right: 24px; bottom: 24px; z-index: 40;
   display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
@@ -515,11 +514,13 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   height: 56px; padding: 0 22px 0 18px; border: 0; border-radius: 100px;
   background: var(--green-600); color: var(--white); font: 600 1rem/1 var(--font-body);
   box-shadow: 0 8px 24px rgba(0, 0, 0, .25); cursor: pointer;
-  transition: background-color .25s, opacity .18s;
+  transform: scale(.3); transition: background-color .25s, transform .2s ease-in;
 }
+/* Aufploppen mit leichtem Überschwingen, kurz verzögert, damit die Navigation zuerst verschwindet */
+.fab.is-visible .fab__btn { transform: none; transition: background-color .25s, transform .45s cubic-bezier(.34, 1.56, .64, 1) .15s; }
+@media (prefers-reduced-motion: reduce) { .fab__btn, .fab.is-visible .fab__btn { transform: none; } }
 .fab__btn:hover { background: #0a6a33; }
 .fab__btn svg { width: 22px; height: 22px; flex: none; }
-.fab.is-dripping .fab__btn { opacity: 0; }
 .fab__menu {
   position: relative;
   display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
@@ -537,11 +538,6 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 }
 .fab__menu a:hover { background: #efefee; }
 .fab__menu svg { width: 18px; height: 18px; flex: none; color: var(--green-600); }
-/* Abtropf-Effekt: Formen verschmelzen über den SVG-Filter #goo zu Flüssigkeit */
-.goo-layer, .drip-layer { position: fixed; inset: 0; pointer-events: none; z-index: 46; }
-.goo-layer { filter: url(#goo); }
-.goo-layer div, .drip-layer div { position: absolute; left: 0; top: 0; will-change: transform; }
-.header.is-hold .header__inner { opacity: 1; transition: none; } /* bis der Tropfen abreißt */
 @media (max-width: 767px) {
   .fab { right: 16px; bottom: 16px; }
   .fab__btn { height: 52px; }

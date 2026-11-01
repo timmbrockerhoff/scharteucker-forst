@@ -369,6 +369,14 @@ h1, h2, h3, h4 { font-weight: 700; }
 .tile:hover::after, .tile:focus-visible::after { background-color: rgba(0, 0, 0, .25); }
 .tile:hover .tile__more, .tile:focus-visible .tile__more { grid-template-rows: 1fr; }
 .tile:hover .tile__cta::after, .tile:focus-visible .tile__cta::after { transform: translateX(4px); }
+/* TEMPORÄR zum Vergleich: Kachel im alten Stil (Titel unten, Beschreibung beim Hovern, keine Glas-Leiste) */
+.tile--classic { justify-content: flex-end; padding: 2.5rem; }
+.tile--classic::after { background-image: linear-gradient(to top, rgba(0, 0, 0, .65) 0%, rgba(0, 0, 0, .25) 55%, rgba(0, 0, 0, .15) 100%); }
+.tile--classic h3 { padding: 0; }
+.tile--classic .tile__body { padding: 0; border-radius: 0; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.tile--classic .tile__more > div { flex-direction: column; }
+.tile--classic .tile__more hr { border-top-color: rgba(250, 250, 250, .6); margin: 1.1rem 0 1rem; }
+.tile--classic .tile__cta { display: none; }
 .tiles--4 { grid-template-columns: repeat(4, 1fr); }
 .tiles--4 .tile { min-height: 400px; }
 
@@ -625,6 +633,8 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
   .tiles, .tiles--4 { grid-template-columns: 1fr; }
   .tile { min-height: 320px; }
   .tile h3 { padding: .75rem .75rem 0; }
+  .tile--classic { padding: 1.75rem; }
+  .tile--classic h3 { padding: 0; }
   .facts { grid-template-columns: repeat(2, 1fr); }
   .fact { min-height: 140px; }
   .stagger { grid-template-columns: 1fr; margin-top: 3.5rem; gap: 1.5rem; }

@@ -3,11 +3,9 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
-// Schnellkontakt: ein Kontakt-Button unten rechts. Ploppt auf, sobald die Navigation beim Runterscrollen verschwindet; über dem Footer ausgeblendet.
+// Schnellkontakt: ein Kontakt-Button unten rechts. Führt zur Kontaktseite, ploppt auf, sobald die Navigation beim Runterscrollen verschwindet; über dem Footer ausgeblendet.
 const fab = document.querySelector('.fab');
-const fabBtn = fab && fab.querySelector('.fab__btn');
 let footerVisible = false, fabShown = false;
-const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
 
 const updateFab = () => {
   if (!fab) return;
@@ -15,32 +13,8 @@ const updateFab = () => {
   if (show === fabShown) return;
   fabShown = show;
   fab.classList.toggle('is-visible', show);
-  if (!show) closeFab();
 };
-if (fab) {
-  new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
-  fabBtn.addEventListener('click', () => { const open = !fab.classList.contains('is-open'); fab.classList.toggle('is-open', open); fabBtn.setAttribute('aria-expanded', open); });
-  document.addEventListener('click', e => { if (!e.target.closest('.fab, .variant-switch')) closeFab(); });
-
-  // TEMPORÄR: Umschalter für die fünf Schnellkontakt-Varianten. Nach der Wahl samt CSS-Blöcken .fab--* und .variant-switch entfernen.
-  const variants = { card: 'A Karte', dial: 'B Kreise', glass: 'C Glas', row: 'D Reihe', tiles: 'E Kacheln' };
-  const bar = document.createElement('div');
-  bar.className = 'variant-switch';
-  bar.innerHTML = '<span>Schnellkontakt</span>' + Object.entries(variants).map(([k, l]) => `<button type="button" data-v="${k}">${l}</button>`).join('');
-  const setVariant = v => {
-    Object.keys(variants).forEach(k => fab.classList.toggle('fab--' + k, k === v));
-    bar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
-    try { localStorage.setItem('fabVariant', v); } catch {}
-  };
-  bar.addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    setVariant(b.dataset.v);
-    fab.classList.add('is-open'); fabBtn.setAttribute('aria-expanded', 'true');
-  });
-  document.body.append(bar);
-  let saved = null; try { saved = localStorage.getItem('fabVariant'); } catch {}
-  setVariant(variants[saved] ? saved : 'card');
-}
+if (fab) new IntersectionObserver(([e]) => { footerVisible = e.isIntersecting; updateFab(); }).observe(document.querySelector('.footer'));
 
 // Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
 let lastY = scrollY, ticking = false;

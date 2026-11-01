@@ -330,7 +330,9 @@ h1, h2, h3, h4 { font-weight: 700; }
 .reveal-text { font-size: clamp(1.4rem, 2.2vw, 2rem); line-height: 1.4; font-weight: 600; max-width: 62rem; letter-spacing: -.005em; }
 .reveal-text .w { opacity: .3; transition: opacity .3s; }
 .reveal-text .w.on { opacity: 1; }
-@media (max-width: 1024px) { .reveal-text br { display: none; } } /* feste Umbrüche nur auf breiten Bildschirmen */
+/* Feste Umbrüche bestimmen auf breiten Bildschirmen die Zeilen, darunter bricht der Text normal um */
+@media (min-width: 1025px) { .reveal-text:has(br) { max-width: none; } }
+@media (max-width: 1024px) { .reveal-text br { display: none; } }
 /* Hellt beim Scrollen als letztes „Wort“ des Textes darüber auf (main.js) */
 .about__link { margin-top: 2.5rem; opacity: .3; transition: opacity .3s; }
 .about__link:is(.on, :hover, :focus-visible) { opacity: 1; }

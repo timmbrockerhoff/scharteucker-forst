@@ -383,7 +383,8 @@ h1, h2, h3, h4 { font-weight: 700; }
 .tiles--4 .tile { min-height: 400px; }
 
 /* ---------- Zahlen & Fakten ---------- */
-.split-head { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-bottom: 5rem; }
+/* Text rechts schließt unten mit der Überschrift links ab */
+.split-head { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 4rem; margin-bottom: 5rem; }
 .split-head p + p { margin-top: 1.5rem; }
 .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; list-style: none; }
 .fact {

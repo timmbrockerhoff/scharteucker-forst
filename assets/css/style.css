@@ -152,8 +152,8 @@ h1, h2, h3, h4 { font-weight: 700; }
 /* Unterstrich zieht sich beim Hovern von links unter dem Text auf, der Pfeil rückt vor */
 .link-arrow span { padding-bottom: 3px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size .35s var(--ease); }
 .link-arrow:is(:hover, :focus-visible) span { background-size: 100% 1.5px; }
-/* Winkel als Rahmenlinie, damit er exakt mittig zur Schrift sitzt; margin-bottom gleicht das padding-bottom des Textes aus */
-.link-arrow::after { content: ""; width: .4em; height: .4em; margin-bottom: 3px; border-top: 1.5px solid; border-right: 1.5px solid; transform: rotate(45deg); transition: transform .35s var(--ease); }
+/* Winkel als Rahmenlinie, mittig zur Höhe der Kleinbuchstaben */
+.link-arrow::after { content: ""; width: .4em; height: .4em; margin-top: 2px; border-top: 1.5px solid; border-right: 1.5px solid; transform: rotate(45deg); transition: transform .35s var(--ease); }
 .link-arrow:is(:hover, :focus-visible)::after { transform: translateX(6px) rotate(45deg); }
 
 /* ---------- Logo ---------- */

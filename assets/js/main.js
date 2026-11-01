@@ -18,12 +18,24 @@ if (fabs.length) new IntersectionObserver(([e]) => { footerVisible = e.isInterse
 document.querySelector('.fab--left .fab__btn')?.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
 
 // Navigation: dunkle Schrift über hellen Sektionen, beim Runterscrollen ausblenden, beim Hochscrollen einblenden
+// Hell oder dunkel unter der Navigation? Fünf Messpunkte über die Breite der mittleren Leiste (mobil: über die ganze Kopfzeile),
+// jeder Punkt zählt als hell, wenn er auf heller Sektionsfläche liegt und nicht auf Foto, Kachel oder Video. Die Mehrheit entscheidet.
+const navList = document.querySelector('.nav__list');
+const underIsLight = () => {
+  let r = navList?.getBoundingClientRect();
+  if (!r || !r.width || getComputedStyle(navList.closest('.nav')).position === 'fixed') r = header.getBoundingClientRect();
+  const y = header.offsetHeight / 2;
+  let light = 0;
+  for (let i = 0; i < 5; i++) {
+    const x = r.left + r.width * (.1 + i * .2);
+    const el = document.elementsFromPoint(x, y).find(e => !header.contains(e));
+    if (el?.closest('.section--light, .section--grey') && !el.closest('.tile, figure, img, video, picture')) light++;
+  }
+  return light >= 3;
+};
 let lastY = scrollY, ticking = false;
 const updateHeader = () => {
-  const under = document.elementsFromPoint(innerWidth / 2, header.offsetHeight / 2)
-    .find(el => !header.contains(el));
-  // Logo, Telefon, Kontakt und Menü-Button: dunkle Schrift nur über heller Fläche (nicht über Fotos). Die mittlere Leiste ist am Desktop immer dunkles Glas.
-  header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey') && !under.closest('.tile, figure, img, video'));
+  header.classList.toggle('on-light', underIsLight());
   const y = scrollY;
   header.classList.toggle('is-compact', y > 80); // außerhalb des Seitenanfangs nur die mittlere Navigation zeigen
   if (Math.abs(y - lastY) > 6) {
@@ -69,7 +81,6 @@ menuBtn.addEventListener('click', () => {
 // Untermenüs: mit Maus beim Überfahren öffnen (kurze Schließverzögerung), sonst per Klick/Tippen; Klick daneben oder Escape schließt
 const toggles = document.querySelectorAll('.nav__toggle');
 const closeDropdowns = () => toggles.forEach(t => { t.parentElement.classList.remove('is-open'); t.setAttribute('aria-expanded', 'false'); });
-const navList = document.querySelector('.nav__list');
 const openDropdown = t => {
   // Wechsel von einem offenen Panel zum anderen: ohne Ein-/Ausblenden, nur der Inhalt tauscht
   const switching = [...toggles].some(o => o !== t && o.parentElement.classList.contains('is-open'));

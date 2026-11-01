@@ -275,13 +275,12 @@ h1, h2, h3, h4 { font-weight: 700; }
 .dropdown__item b { font-weight: 600; font-size: 1rem; line-height: 1.5; }
 .dropdown__item span { font-weight: 400; font-size: 1rem; line-height: 1.5; color: #3d4a40; hyphens: manual; -webkit-hyphens: manual; }
 .dropdown__item:hover, .dropdown__item[aria-current="page"] { background: #efefee; }
-/* Desktop: Leiste und Untermenü immer dunkelgrünes Glas mit weißer Schrift, damit sie auf jedem Untergrund (hell, dunkel, Foto) gut lesbar sind */
+/* Untermenü als Milchglas wie die Navigationsleiste (nur Desktop), Schrift folgt hell/dunkel der Navigation */
 @media (min-width: 992px) {
-  .nav__list::before, .dropdown { background: rgba(0, 25, 6, .55); }
-  .dropdown { -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); box-shadow: none; }
-  .nav__list .nav__link, .dropdown__item { color: var(--white); }
+  .dropdown { background: var(--nav-pill); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); box-shadow: none; transition: opacity .25s, transform .25s var(--ease), visibility .25s, background-color .3s; }
+  .dropdown__item { color: var(--nav-fg); }
   .dropdown__item span { color: inherit; opacity: .75; }
-  .dropdown__item:hover, .dropdown__item[aria-current="page"] { background: rgba(255, 255, 255, .1); }
+  .dropdown__item:hover, .dropdown__item[aria-current="page"] { background: var(--nav-dd-hover); }
 }
 
 

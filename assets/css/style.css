@@ -531,17 +531,78 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 @media (hover: hover) { .fab:hover .fab__menu { opacity: 1; visibility: visible; transform: none; } }
 .fab:focus-within .fab__menu, .fab.is-open .fab__menu { opacity: 1; visibility: visible; transform: none; }
 .fab__menu a {
-  display: flex; align-items: center; gap: 10px; white-space: nowrap;
-  padding: 11px 18px; border-radius: 100px;
-  background: var(--green-600); color: var(--white); text-decoration: none; font: 600 .95rem/1 var(--font-body);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, .18); transition: background-color .2s;
+  position: relative; display: flex; align-items: center; gap: 12px; white-space: nowrap;
+  text-decoration: none; font-family: var(--font-body); transition: background-color .2s, color .2s, opacity .2s;
 }
-.fab__menu a:hover { background: #0a6a33; }
 .fab__menu svg { width: 18px; height: 18px; flex: none; }
+.fab__txt { display: flex; flex-direction: column; gap: 4px; }
+.fab__txt b { font-weight: 600; font-size: .95rem; line-height: 1.1; }
+.fab__txt small { font-weight: 400; font-size: .8rem; line-height: 1.1; opacity: .7; }
+
+/* TEMPORÄR: fünf Varianten zum Umschalten (Leiste .variant-switch aus main.js). Nach der Wahl die übrigen löschen. */
+
+/* A – Karte: eine weiße Fläche, drei Zeilen mit Trennlinien */
+.fab--card { align-items: flex-end; }
+.fab--card .fab__menu { gap: 0; overflow: hidden; border-radius: 16px; background: var(--white); box-shadow: 0 10px 30px rgba(0, 0, 0, .2); }
+.fab--card .fab__menu a { padding: 12px 20px 12px 12px; color: var(--green-900); }
+.fab--card .fab__menu a + a { border-top: 1px solid rgba(0, 0, 0, .08); }
+.fab--card .fab__menu a:hover { background: #efefee; }
+.fab--card .fab__menu svg { box-sizing: content-box; padding: 9px; border-radius: 50%; background: var(--green-600); color: var(--white); }
+
+/* B – Kreise: grüne Symbol-Kreise genau über der Button-Mitte, Etikett links daneben */
+.fab--dial .fab__menu { gap: 12px; align-items: center; }
+.fab--dial .fab__menu a { width: 48px; height: 48px; justify-content: center; border-radius: 50%; background: var(--green-600); color: var(--white); box-shadow: 0 6px 20px rgba(0, 0, 0, .2); }
+.fab--dial .fab__menu a:hover { background: #0a6a33; }
+.fab--dial .fab__menu svg { width: 20px; height: 20px; }
+.fab--dial .fab__txt { position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); padding: 7px 12px; border-radius: 100px; background: var(--white); color: var(--green-900); box-shadow: 0 4px 14px rgba(0, 0, 0, .15); }
+.fab--dial .fab__txt b { font-size: .85rem; }
+.fab--dial .fab__txt small { display: none; }
+
+/* C – Glas: dunkelgrünes Milchglas-Panel wie das Untermenü der Navigation */
+.fab--glass { align-items: flex-end; }
+.fab--glass .fab__menu { gap: 2px; padding: 8px; border-radius: 16px; background: rgba(0, 25, 6, .72); -webkit-backdrop-filter: blur(30px); backdrop-filter: blur(30px); box-shadow: 0 10px 30px rgba(0, 0, 0, .25); }
+.fab--glass .fab__menu a { padding: 10px 18px 10px 12px; border-radius: 10px; color: var(--white); }
+.fab--glass .fab__menu a:hover { background: rgba(255, 255, 255, .1); }
+.fab--glass .fab__menu svg { color: var(--sage); }
+
+/* D – Reihe: runde Symbol-Buttons links neben dem Kontakt-Button, Titel als Tooltip */
+.fab--row { flex-direction: row; align-items: center; }
+.fab--row .fab__menu { flex-direction: row; gap: 10px; transform: translateX(10px); }
+.fab--row .fab__menu::after { display: none; }
+.fab--row .fab__menu a { width: 56px; height: 56px; justify-content: center; border-radius: 50%; background: var(--green-600); color: var(--white); box-shadow: 0 8px 24px rgba(0, 0, 0, .25); }
+.fab--row .fab__menu a:hover { background: #0a6a33; }
+.fab--row .fab__menu svg { width: 22px; height: 22px; }
+.fab--row .fab__txt { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); padding: 6px 10px; border-radius: 6px; background: var(--green-900); color: var(--white); opacity: 0; pointer-events: none; transition: opacity .2s; }
+.fab--row .fab__txt b { font-size: .8rem; }
+.fab--row .fab__txt small { display: none; }
+.fab--row .fab__menu a:hover .fab__txt, .fab--row .fab__menu a:focus-visible .fab__txt { opacity: 1; }
+
+/* E – Kacheln: drei gleich große weiße Quadrate nebeneinander */
+.fab--tiles { align-items: flex-end; }
+.fab--tiles .fab__menu { flex-direction: row; gap: 8px; }
+.fab--tiles .fab__menu a { width: 92px; height: 92px; flex-direction: column; justify-content: center; gap: 10px; padding: 8px; border-radius: 16px; background: var(--white); color: var(--green-900); text-align: center; white-space: normal; box-shadow: 0 6px 20px rgba(0, 0, 0, .18); }
+.fab--tiles .fab__menu a:hover { background: #efefee; }
+.fab--tiles .fab__menu svg { width: 24px; height: 24px; color: var(--green-600); }
+.fab--tiles .fab__txt b { font-size: .8rem; }
+.fab--tiles .fab__txt small { display: none; }
+
+.variant-switch {
+  position: fixed; left: 16px; bottom: 16px; z-index: 41; max-width: calc(100% - 180px);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 6px; border-radius: 12px;
+  background: rgba(0, 25, 6, .85); color: var(--white); font: 600 .75rem/1 var(--font-body);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.variant-switch span { padding: 0 6px; opacity: .7; }
+.variant-switch button { padding: 7px 10px; border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; cursor: pointer; }
+.variant-switch button[aria-pressed="true"] { background: var(--white); color: var(--green-900); }
+
 @media (max-width: 767px) {
   .fab { right: 16px; bottom: 16px; }
   .fab__btn { height: 52px; }
+  .fab--row .fab__menu a { width: 52px; height: 52px; }
+  .fab--tiles .fab__menu a { width: 78px; height: 78px; }
 }
+
 
 /* ---------- Footer ---------- */
 .footer { background: var(--green-900); color: var(--light); position: relative; overflow: hidden; padding-top: 6rem; }

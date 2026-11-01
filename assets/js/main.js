@@ -45,13 +45,17 @@ const imgLumAt = (img, x, y) => { // berücksichtigt object-fit: cover und objec
   const cl = n => Math.min(GRID - 1, Math.max(0, Math.floor(n * GRID)));
   return g[cl(v) * GRID + cl(u)];
 };
+const mediaLum = (el, x, y) => el.tagName === 'IMG' ? imgLumAt(el, x, y) : .1; // Video = Hero, stark abgedunkelt
 const pointLum = (x, y) => {
-  for (const el of document.elementsFromPoint(x, y)) {
-    if (header.contains(el)) continue;
-    if (el.tagName === 'IMG') return imgLumAt(el, x, y);
-    if (el.tagName === 'VIDEO') return .1;
+  const stack = document.elementsFromPoint(x, y).filter(el => !header.contains(el));
+  for (const el of stack) {
+    if (el.tagName === 'IMG' || el.tagName === 'VIDEO') return mediaLum(el, x, y);
     const m = getComputedStyle(el).backgroundColor.match(/[\d.]+/g);
-    if (m && (m[3] === undefined || +m[3] > .3)) return lum(+m[0], +m[1], +m[2]);
+    if (m && (m[3] === undefined || +m[3] > .3)) {
+      // Ein Foto/Video im Inneren dieses Elements liegt über dessen Hintergrundfarbe (z. B. Kachel mit dunkler Grundfarbe)
+      const media = stack.find(e => (e.tagName === 'IMG' || e.tagName === 'VIDEO') && el.contains(e));
+      return media ? mediaLum(media, x, y) : lum(+m[0], +m[1], +m[2]);
+    }
   }
   return 1;
 };

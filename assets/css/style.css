@@ -538,8 +538,10 @@ figcaption { font-size: .9rem; margin-top: .75rem; opacity: .75; }
 .fab__menu a:hover { background: #efefee; }
 .fab__menu svg { width: 18px; height: 18px; flex: none; color: var(--green-600); }
 /* Abtropf-Effekt: Formen verschmelzen über den SVG-Filter #goo zu Flüssigkeit */
-.goo-layer { position: fixed; inset: 0; pointer-events: none; z-index: 46; filter: url(#goo); }
-.goo-layer div { position: absolute; left: 0; top: 0; background: var(--green-600); will-change: transform; }
+.goo-layer, .drip-layer { position: fixed; inset: 0; pointer-events: none; z-index: 46; }
+.goo-layer { filter: url(#goo); }
+.goo-layer div, .drip-layer div { position: absolute; left: 0; top: 0; will-change: transform; }
+.header.is-hold .header__inner { opacity: 1; transition: none; } /* bis der Tropfen abreißt */
 @media (max-width: 767px) {
   .fab { right: 16px; bottom: 16px; }
   .fab__btn { height: 52px; }

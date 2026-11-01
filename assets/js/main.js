@@ -3,52 +3,73 @@
 const header = document.querySelector('.header');
 const menuBtn = document.querySelector('.menu-btn');
 
-// Schnellkontakt: ein Kontakt-Button unten rechts. Erscheint unterhalb des Seitenkopfs mit Abtropf-Effekt
-// (oben wölbt sich der Kontakt-Button kurz aus, unten rechts entsteht der Button mit einsinkender Ausbuchtung), über dem Footer ausgeblendet.
+// Schnellkontakt: ein Kontakt-Button unten rechts. Erscheint beim Runterscrollen als fallender Tropfen:
+// unter dem Kontakt-Button oben schwillt ein Tropfen an, schnürt sich ab, fällt mit Schwerkraft und schwappt unten zum Button auf.
 const fab = document.querySelector('.fab');
 const fabBtn = fab && fab.querySelector('.fab__btn');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let footerVisible = false, fabShown = false, hiddenBy = 'top', stopDrip = null;
 const closeFab = () => { if (fab) { fab.classList.remove('is-open'); fabBtn.setAttribute('aria-expanded', 'false'); } };
 
-const drip = (dur = 1300) => {
+const drip = () => {
   const src = document.querySelector(matchMedia('(max-width: 991px)').matches ? '.menu-btn' : '.header .nav__cta');
   const a = src.getBoundingClientRect(), b = fabBtn.getBoundingClientRect();
-  if (!a.width || !b.width) return;
+  if (!a.width || !b.width || getComputedStyle(header.firstElementChild).opacity < .5) return; // Button oben nicht sichtbar: ohne Effekt
   const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v)), lerp = (x, y, t) => x + (y - x) * t;
   const inOut = t => -(Math.cos(Math.PI * t) - 1) / 2, easeIn = t => t * t, easeOut = t => 1 - Math.pow(1 - t, 3);
-  const ax = a.left + a.width / 2, ay = a.top + a.height / 2;
-  const bx = b.left + b.width / 2, by = b.top + b.height / 2;
-  // Kein freier Tropfen: oben wölbt sich der Button kurz aus und zieht sich zurück, unten wächst er mit einer einsinkenden Ausbuchtung
-  const R = 30, tipY = a.bottom + 48, budY = by - b.height / 2 - 38;
-  const layer = document.createElement('div'); layer.className = 'goo-layer'; document.body.appendChild(layer);
-  const blob = r => { const d = document.createElement('div'); d.style.borderRadius = r; layer.appendChild(d); return d; };
-  const place = (el, x, y, w, h) => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px)`; };
-  const rest = blob('100px'), drop = blob('50%'), pool = blob('100px'), neck = Array.from({ length: 5 }, () => blob('50%'));
+  const from = getComputedStyle(src).backgroundColor, to = getComputedStyle(fabBtn).backgroundColor;
+  const tint = p => `color-mix(in srgb, ${to} ${Math.round(clamp(p) * 100)}%, ${from})`;
+  const ax = a.left + a.width / 2, bx = b.left + b.width / 2, by = b.top + b.height / 2;
+  // Zeiten in ms: Anschwellen, Abschnüren, freier Fall (Dauer aus der Fallhöhe), Aufprall mit Nachschwingen
+  const R = 13, G = .007, SWELL = 380, PINCH = 200, SPLASH = 560, y0 = a.bottom + 40;
+  const tDet = SWELL + PINCH, tHit = tDet + Math.sqrt(2 * Math.max(0, b.top - R - y0) / G), total = tHit + SPLASH;
+  const mk = (parent, r, color) => { const d = document.createElement('div'); d.style.borderRadius = r; d.style.background = color; parent.appendChild(d); return d; };
+  const place = (el, x, y, w, h, extra = '') => { el.style.width = w + 'px'; el.style.height = h + 'px'; el.style.transform = `translate(${x - w / 2}px,${y - h / 2}px)${extra}`; };
+  const goo = document.createElement('div'); goo.className = 'goo-layer';
+  const crisp = document.createElement('div'); crisp.className = 'drip-layer';
+  document.body.append(goo, crisp);
+  // im Goo-Filter verschmelzen: Ansatz am Button (liegt hinter ihm), anschwellender Tropfen, Faden, Ziel-Button, einsinkender Tropfen
+  const anchor = mk(goo, '50%', from), bulge = mk(goo, '50%', from), pool = mk(goo, '100px', to), sink = mk(goo, '50%', to);
+  const neck = Array.from({ length: 4 }, () => mk(goo, '50%', from));
+  // scharf gezeichnet: fallender Tropfen (Spitze oben), Nachtropfen, zwei Spritzer
+  const drop = mk(crisp, '0 50% 50% 50%', from), sat = mk(crisp, '50%', from), splash = [mk(crisp, '50%', to), mk(crisp, '50%', to)];
+  header.classList.add('is-hold'); // Navigation bleibt sichtbar, bis der Tropfen abreißt
   fab.classList.add('is-dripping');
   let raf; const t0 = performance.now();
-  const end = () => { cancelAnimationFrame(raf); layer.remove(); fab.classList.remove('is-dripping'); stopDrip = null; };
-  const P1 = .35, H = .5; // oben ausdehnen bis P1, zurückziehen bis H, danach unten
+  const end = () => { cancelAnimationFrame(raf); goo.remove(); crisp.remove(); header.classList.remove('is-hold'); fab.classList.remove('is-dripping'); stopDrip = null; };
   const frame = now => {
-    const t = clamp((now - t0) / dur);
-    if (t < H) {
-      const grow = inOut(clamp(t / P1)), f = 1 - easeIn(clamp((t - P1) / (H - P1)));
-      const y = lerp(a.bottom - 6, tipY, grow) - 8 * (1 - f), size = lerp(12, R, grow) * f;
-      place(drop, ax, y, size, size);
-      place(rest, ax, ay, a.width * f + .0001, a.height * f + .0001);
-      place(pool, bx, by, 0, 0);
-      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), r = (5 + 4 * (1 - s)) * f; place(el, ax, lerp(a.bottom - 2, y, s), r * 2, r * 2); });
+    const ms = now - t0;
+    // oben: anschwellen, dann lang ziehen und abschnüren
+    if (ms < tDet) {
+      const sw = inOut(clamp(ms / SWELL)), pu = clamp((ms - SWELL) / PINCH), r = lerp(4, R, sw);
+      const y = lerp(a.bottom + r * .6, y0, easeIn(pu));
+      place(anchor, ax, a.bottom - 7, a.width * .45, 14);
+      place(bulge, ax, y, r * 2, r * 2);
+      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), nr = pu > 0 ? (6 - 2 * s) * (1 - easeIn(pu)) : 0; place(el, ax, lerp(a.bottom - 2, y - r * .5, s), nr * 2, nr * 2); });
     } else {
-      const u = (t - H) / (1 - H), gw = easeOut(clamp(u / .7)), wob = 1 + .05 * Math.sin(clamp((u - .8) / .2) * Math.PI);
-      const k = easeOut(clamp(u / .3)) * (1 - easeIn(clamp((u - .45) / .55)));
-      const y = lerp(budY, by - b.height * .2, easeIn(clamp(u / .85))), size = R * k;
-      place(rest, ax, ay, 0, 0);
-      place(drop, bx, y, size, size);
-      place(pool, bx, by, b.width * gw * wob + .0001, b.height * gw / wob + .0001);
-      neck.forEach((el, i) => { const s = (i + 1) / (neck.length + 1), r = (5 + 4 * s) * k; place(el, bx, lerp(y, by, s), r * 2, r * 2); });
+      header.classList.remove('is-hold');
+      const k = clamp((ms - tDet) / 260);
+      place(anchor, ax, a.bottom - 7 - 4 * k, a.width * .45 * (1 - k), 14 * (1 - easeOut(k)));
+      place(bulge, 0, 0, 0, 0); neck.forEach(el => place(el, 0, 0, 0, 0));
     }
-    if (t < 1) raf = requestAnimationFrame(frame);
-    else { fab.classList.remove('is-dripping'); layer.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160 }).onfinish = end; }
+    // freier Fall mit Schwerkraft: je schneller, desto länger gestreckt; färbt sich unterwegs ins Grün
+    if (ms >= tDet && ms < tHit) {
+      const dt = ms - tDet, p = dt / (tHit - tDet), y = y0 + G * dt * dt / 2, sy = 1 + Math.min(.35, G * dt * .12);
+      place(drop, lerp(ax, bx, easeIn(p)), y, R * 2, R * 2, ` scale(${1 / Math.sqrt(sy)},${sy}) rotate(45deg)`);
+      drop.style.background = tint(p);
+      const ds = Math.max(0, dt - 50), sy2 = y0 - R * 1.8 + G * ds * ds / 2;
+      place(sat, lerp(ax, bx, easeIn(p)), sy2, 5, 5); sat.style.background = tint(p); sat.style.opacity = sy2 < b.top - 4 ? 1 : 0;
+    } else { place(drop, 0, 0, 0, 0); place(sat, 0, 0, 0, 0); }
+    // unten: Aufprall, Tropfen sinkt ein, Button schwappt breit auf und schwingt aus, zwei Spritzer fliegen weg
+    if (ms >= tHit) {
+      const t = ms - tHit, k = t / SPLASH, w = .16 * Math.exp(-5 * k) * Math.sin(k * Math.PI * 5);
+      const gw = easeOut(clamp(k / .4)), gh = easeOut(clamp(k / .3));
+      place(sink, bx, lerp(b.top, by, clamp(k / .25)), R * 2 * (1 - easeIn(clamp(k / .25))), R * 2 * (1 - easeIn(clamp(k / .25))));
+      place(pool, bx, lerp(b.top + 6, by, gh), b.width * gw * (1 + w) + .0001, b.height * gh * (1 - w) + .0001);
+      splash.forEach((el, i) => { const d = i ? 1 : -1, x = bx + d * (8 + .12 * t), y = b.top - .32 * t + G * t * t / 2; place(el, x, y, 6, 6); el.style.opacity = clamp(1 - t / 320); });
+    } else { place(pool, 0, 0, 0, 0); place(sink, 0, 0, 0, 0); splash.forEach(el => place(el, 0, 0, 0, 0)); }
+    if (ms < total) raf = requestAnimationFrame(frame);
+    else { fab.classList.remove('is-dripping'); goo.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160 }).onfinish = end; }
   };
   raf = requestAnimationFrame(frame);
   stopDrip = end;

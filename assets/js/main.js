@@ -22,9 +22,8 @@ let lastY = scrollY, ticking = false;
 const updateHeader = () => {
   const under = document.elementsFromPoint(innerWidth / 2, header.offsetHeight / 2)
     .find(el => !header.contains(el));
-  // dunkle Schrift nur über heller Fläche: nicht über Fotos und in der ganzen Sektion mit den Produktkacheln weiß
-  const lightSec = under?.closest('.section--light, .section--grey');
-  header.classList.toggle('on-light', !!lightSec && !lightSec.querySelector('.tiles') && !under.closest('figure, img, video'));
+  // Logo, Telefon, Kontakt und Menü-Button: dunkle Schrift nur über heller Fläche (nicht über Fotos). Die mittlere Leiste ist am Desktop immer dunkles Glas.
+  header.classList.toggle('on-light', !!under?.closest('.section--light, .section--grey') && !under.closest('.tile, figure, img, video'));
   const y = scrollY;
   header.classList.toggle('is-compact', y > 80); // außerhalb des Seitenanfangs nur die mittlere Navigation zeigen
   if (Math.abs(y - lastY) > 6) {

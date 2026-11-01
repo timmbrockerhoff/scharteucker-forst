@@ -153,7 +153,7 @@ h1, h2, h3, h4 { font-weight: 700; }
 .link-arrow span { padding-bottom: 3px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat; transition: background-size .35s var(--ease); }
 .link-arrow:is(:hover, :focus-visible) span { background-size: 100% 1.5px; }
 /* Winkel als Rahmenlinie, mittig zur Höhe der Kleinbuchstaben */
-.link-arrow::after { content: ""; width: .4em; height: .4em; margin-top: 2px; border-top: 1.5px solid; border-right: 1.5px solid; transform: rotate(45deg); transition: transform .35s var(--ease); }
+.link-arrow::after { content: ""; width: .4em; height: .4em; border-top: 1.5px solid; border-right: 1.5px solid; transform: rotate(45deg); transition: transform .35s var(--ease); }
 .link-arrow:is(:hover, :focus-visible)::after { transform: translateX(6px) rotate(45deg); }
 
 /* ---------- Logo ---------- */
